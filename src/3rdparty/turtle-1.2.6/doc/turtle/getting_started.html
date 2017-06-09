@@ -1,0 +1,279 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Getting Started</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<link rel="home" href="../index.html" title="Turtle">
+<link rel="up" href="../index.html" title="Turtle">
+<link rel="prev" href="motivation.html" title="Motivation">
+<link rel="next" href="customization.html" title="Customization">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="" width="" height="" src="../images/boost.png"></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/files">Download</a></td>
+<td align="center"><a href="http://sourceforge.net/p/turtle/news">News</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/support">Support</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle">Project</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="motivation.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="customization.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="turtle.getting_started"></a><a class="link" href="getting_started.html" title="Getting Started">Getting Started</a>
+</h2></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="getting_started.html#turtle.getting_started.create__expect__trigger__verify">Create,
+      expect, trigger, verify</a></span></dt>
+<dt><span class="section"><a href="getting_started.html#turtle.getting_started.expectation_selection_algorithm">Expectation
+      selection algorithm</a></span></dt>
+<dt><span class="section"><a href="getting_started.html#turtle.getting_started.error_diagnostic">Error diagnostic</a></span></dt>
+</dl></div>
+<p>
+      This section introduces most of the library features in a series of use cases
+      built on the example from the <a class="link" href="motivation.html" title="Motivation">motivation</a>
+      section.
+    </p>
+<p>
+      For all the code examples the following is assumed :
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_AUTO_TEST_MAIN</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">auto_unit_test</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">turtle</span><span class="special">/</span><span class="identifier">mock</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+    </p>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.getting_started.create__expect__trigger__verify"></a><a class="link" href="getting_started.html#turtle.getting_started.create__expect__trigger__verify" title="Create, expect, trigger, verify">Create,
+      expect, trigger, verify</a>
+</h3></div></div></div>
+<p>
+        A simple unit test with mock objects usually splits into several phases as
+        illustrated by :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">zero_plus_zero_is_zero</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_view</span> <span class="identifier">v</span><span class="special">;</span>                               <span class="comment">// create mock objects</span>
+   <span class="identifier">calculator</span> <span class="identifier">c</span><span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>                         <span class="comment">// create object under test</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">).</span><span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="number">0</span> <span class="special">);</span> <span class="comment">// configure mock objects</span>
+   <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span> <span class="special">);</span>                             <span class="comment">// exercise object under test</span>
+<span class="special">}</span>                                             <span class="comment">// verify mock objects</span>
+</pre>
+<p>
+      </p>
+<p>
+        Triggering the object under test in turn calls methods on the mock objects,
+        and any unexpected call raises an error.
+      </p>
+<p>
+        Mock objects are automatically verified during their destruction and an error
+        is signalled if any unfulfilled expectation remains.
+      </p>
+<p>
+        More sophisticated tests sometimes require more complex use cases and in
+        particular might need to verify or reset mock objects.
+      </p>
+<p>
+        Here is an example highlighting the different possibilities :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">zero_plus_zero_is_zero</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_view</span> <span class="identifier">v</span><span class="special">;</span>
+    <span class="identifier">calculator</span> <span class="identifier">c</span><span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">).</span><span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="number">0</span> <span class="special">);</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span> <span class="special">);</span>
+    <span class="identifier">MOCK_VERIFY</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">);</span>                  <span class="comment">// verify all expectations are fulfilled for the 'display' method</span>
+    <span class="identifier">mock</span><span class="special">::</span><span class="identifier">verify</span><span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>                         <span class="comment">// verify all expectations are fulfilled for all methods of 'v'</span>
+    <span class="identifier">mock</span><span class="special">::</span><span class="identifier">verify</span><span class="special">();</span>                            <span class="comment">// verify all expectations are fulfilled for all existing mock objects</span>
+    <span class="identifier">MOCK_RESET</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">);</span>                   <span class="comment">// reset all expectations for the 'display' method</span>
+    <span class="identifier">mock</span><span class="special">::</span><span class="identifier">reset</span><span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>                          <span class="comment">// reset all expectations for all methods of 'v'</span>
+    <span class="identifier">mock</span><span class="special">::</span><span class="identifier">reset</span><span class="special">();</span>                             <span class="comment">// reset all expectations for all existing mock objects</span>
+<span class="special">}</span>                                              <span class="comment">// automatically verify all expectations are fulfilled for all mock objects going out of scope</span>
+</pre>
+<p>
+      </p>
+<p>
+        Note that all verifications upon destruction will be disabled if the mock
+        objects are destroyed in the context of an exception being raised.
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.getting_started.expectation_selection_algorithm"></a><a class="link" href="getting_started.html#turtle.getting_started.expectation_selection_algorithm" title="Expectation selection algorithm">Expectation
+      selection algorithm</a>
+</h3></div></div></div>
+<p>
+        A method can be configured with several expectations, for instance :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">zero_plus_zero_is_zero</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_view</span> <span class="identifier">v</span><span class="special">;</span>
+    <span class="identifier">calculator</span> <span class="identifier">c</span><span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">).</span><span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="number">0</span> <span class="special">);</span> <span class="comment">// this call must occur once (and only once)</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="number">1</span> <span class="special">);</span>        <span class="comment">// this call can occur any number of times (including never)</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Each method call is then handled by processing the expectations in the order
+        they have been defined :
+      </p>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+            looking for a match with valid parameter constraints evaluated from left
+            to right
+          </li>
+<li class="listitem">
+            checking that the invocation count for this match is not exhausted
+          </li>
+</ol></div>
+<p>
+        An error is raised if none can be found.
+      </p>
+<p>
+        By default the relative order of the calls does not matter. It can however
+        be enforced :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">zero_plus_zero_is_zero</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_view</span> <span class="identifier">v</span><span class="special">;</span>
+    <span class="identifier">calculator</span> <span class="identifier">c</span><span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>
+    <span class="identifier">mock</span><span class="special">::</span><span class="identifier">sequence</span> <span class="identifier">s</span><span class="special">;</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">).</span><span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="number">0</span> <span class="special">).</span><span class="identifier">in</span><span class="special">(</span> <span class="identifier">s</span> <span class="special">);</span> <span class="comment">// add this expectation to the sequence</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="number">1</span> <span class="special">).</span><span class="identifier">in</span><span class="special">(</span> <span class="identifier">s</span> <span class="special">);</span>        <span class="comment">// add this expectation to the sequence after the previous call</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span> <span class="special">);</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">1</span><span class="special">,</span> <span class="number">0</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Therefore an error will be issued if the second expectation is matched before
+        the first one has been exhausted.
+      </p>
+<p>
+        An expectation can be part of several sequences :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">zero_plus_zero_is_zero</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_view</span> <span class="identifier">v</span><span class="special">;</span>
+    <span class="identifier">calculator</span> <span class="identifier">c</span><span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>
+    <span class="identifier">mock</span><span class="special">::</span><span class="identifier">sequence</span> <span class="identifier">s1</span><span class="special">,</span> <span class="identifier">s2</span><span class="special">;</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">).</span><span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="number">0</span> <span class="special">).</span><span class="identifier">in</span><span class="special">(</span> <span class="identifier">s1</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">).</span><span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="number">1</span> <span class="special">).</span><span class="identifier">in</span><span class="special">(</span> <span class="identifier">s2</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="number">2</span> <span class="special">).</span><span class="identifier">in</span><span class="special">(</span> <span class="identifier">s1</span><span class="special">,</span> <span class="identifier">s2</span> <span class="special">);</span>    <span class="comment">// add this expectation to both sequences after the previous calls</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span> <span class="special">);</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">1</span><span class="special">,</span> <span class="number">0</span> <span class="special">);</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">1</span><span class="special">,</span> <span class="number">1</span> <span class="special">);</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">2</span><span class="special">,</span> <span class="number">0</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.getting_started.error_diagnostic"></a><a class="link" href="getting_started.html#turtle.getting_started.error_diagnostic" title="Error diagnostic">Error diagnostic</a>
+</h3></div></div></div>
+<p>
+        During the execution of a test case, an error can happen for one of the following
+        reasons :
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            unexpected call when no match can be found for the given arguments (typically
+            logs an error and throws an exception)
+          </li>
+<li class="listitem">
+            sequence failure when an enforced call sequence has not been followed
+            (typically logs an error and throws an exception)
+          </li>
+<li class="listitem">
+            verification failure if a remaining match has not been fulfilled upon
+            manual verification (typically logs an error)
+          </li>
+<li class="listitem">
+            untriggered expectation if a remaining match has not been fulfilled when
+            destroying the mock object (typically logs an error)
+          </li>
+<li class="listitem">
+            missing action if a method supposed to return something else than void
+            has not been configured properly (typically logs an error and throws
+            an exception)
+          </li>
+</ul></div>
+<p>
+        The exact type of the exception thrown depends on the <a class="link" href="customization.html#turtle.customization.test_framework_integration" title="Test framework integration">test
+        framework integration</a> used.
+      </p>
+<p>
+        An error log typically looks like :
+      </p>
+<pre class="programlisting"><span class="identifier">unknown</span> <span class="identifier">location</span><span class="special">(</span><span class="number">0</span><span class="special">):</span> <span class="identifier">error</span> <span class="identifier">in</span> <span class="string">"zero_plus_zero_is_zero"</span><span class="special">:</span> <span class="identifier">unexpected</span> <span class="identifier">call</span><span class="special">:</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">mock_view</span><span class="special">::</span><span class="identifier">display</span><span class="special">(</span> <span class="number">0</span> <span class="special">)</span>
+<span class="identifier">v</span> <span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="number">1</span> <span class="special">)</span>
+<span class="identifier">v</span> <span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="number">2</span> <span class="special">)</span>
+<span class="special">.</span> <span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="number">3</span> <span class="special">)</span>
+</pre>
+<p>
+        On the first line is the description of what happened : here the display
+        method of object v of class mock_view has been called with an actual value
+        of 0.
+      </p>
+<p>
+        The following lines list the set expectations with the check (the v character)
+        meaning the expectation has been exhausted. It therefore means that the two
+        first expectations have been fulfilled by two calls, and then instead of
+        3 in the third call 0 has been erroneously passed on to the mock object.
+      </p>
+<p>
+        Another common error looks like :
+      </p>
+<pre class="programlisting"><span class="identifier">src</span><span class="special">/</span><span class="identifier">tests</span><span class="special">/</span><span class="identifier">turtle_test</span><span class="special">/</span><span class="identifier">Tutorial</span><span class="special">.</span><span class="identifier">cpp</span><span class="special">(</span><span class="number">73</span><span class="special">):</span> <span class="identifier">error</span> <span class="identifier">in</span> <span class="string">"zero_plus_zero_is_zero"</span><span class="special">:</span> <span class="identifier">untriggered</span> <span class="identifier">expectation</span><span class="special">:</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">mock_view</span><span class="special">::</span><span class="identifier">display</span>
+<span class="identifier">v</span> <span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="number">1</span> <span class="special">)</span>
+<span class="identifier">v</span> <span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="number">2</span> <span class="special">)</span>
+<span class="special">.</span> <span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="number">3</span> <span class="special">)</span>
+</pre>
+<p>
+        The first line tells that a set expectation has not been fulfilled. The file
+        and line number give the location where the corresponding expectation has
+        been configured.
+      </p>
+<p>
+        The following lines once again list the set expectations. It means the two
+        first calls correctly passed the expected values to the mock object, but
+        then no third call happened.
+      </p>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2008-2014 Mathieu Champlon<p>
+        Distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">Boost
+        Software License, Version 1.0</a>.
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="motivation.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="customization.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

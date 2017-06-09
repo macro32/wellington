@@ -1,0 +1,7 @@
+SUBDIRS(${SRC}/gui)
+SUBDIRS(${SRC}/pluginEngine)
+SUBDIRS(${SRC}/renderEngine)
+SUBDIRS(${SRC}/plugins/core/polyline)
+SUBDIRS(${SRC}/plugins/core/Mover)
+SUBDIRS(${SRC}/plugins/core/load)
+SUBDIRS(${SRC}/plugins/core/save) 

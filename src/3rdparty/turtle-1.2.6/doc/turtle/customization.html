@@ -1,0 +1,500 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Customization</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<link rel="home" href="../index.html" title="Turtle">
+<link rel="up" href="../index.html" title="Turtle">
+<link rel="prev" href="getting_started.html" title="Getting Started">
+<link rel="next" href="reference.html" title="Reference">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="" width="" height="" src="../images/boost.png"></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/files">Download</a></td>
+<td align="center"><a href="http://sourceforge.net/p/turtle/news">News</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/support">Support</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle">Project</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="getting_started.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="reference.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="turtle.customization"></a><a class="link" href="customization.html" title="Customization">Customization</a>
+</h2></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="customization.html#turtle.customization.logging">Logging</a></span></dt>
+<dt><span class="section"><a href="customization.html#turtle.customization.constraints">Constraints</a></span></dt>
+<dt><span class="section"><a href="customization.html#turtle.customization.number_of_arguments">Number of arguments</a></span></dt>
+<dt><span class="section"><a href="customization.html#turtle.customization.test_framework_integration">Test
+      framework integration</a></span></dt>
+<dt><span class="section"><a href="customization.html#turtle.customization.thread_safety">Thread safety</a></span></dt>
+</dl></div>
+<p>
+      This section explains how to customize different aspects of the library.
+    </p>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.customization.logging"></a><a class="link" href="customization.html#turtle.customization.logging" title="Logging">Logging</a>
+</h3></div></div></div>
+<p>
+        The library will perform logging lazily, e.g. only when actually needed,
+        which is usually because an error happens but it depends on the <a class="link" href="customization.html#turtle.customization.test_framework_integration" title="Test framework integration">test
+        framework integration</a> used. Parameters and <a class="link" href="customization.html#turtle.customization.constraints" title="Constraints">constraints</a>
+        are serialized to report meaningful diagnostics of the failures.
+      </p>
+<p>
+        By default the library attempts to serialize to an std::ostream and if this
+        is not possible will use a '?'.
+      </p>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          Any incomplete type is gracefully handled and yields a '?'.
+        </p></td></tr>
+</table></div>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          Serializing a type inconsistently (including across several translation
+          units) violates the <a href="http://en.wikipedia.org/wiki/One_Definition_Rule" target="_top">One
+          Definition Rule</a>.
+        </p></td></tr>
+</table></div>
+<p>
+        If for some reason the serialization to an std::ostream shouldn't be used,
+        it can be overridden by a serialization operator to a mock::stream, for instance
+        to log user_type declared in user_namespace :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">user_namespace</span>
+<span class="special">{</span>
+    <span class="keyword">struct</span> <span class="identifier">user_type</span>
+    <span class="special">{};</span>
+
+    <span class="keyword">inline</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">stream</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">&lt;&lt;(</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">stream</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">user_type</span><span class="special">&amp;</span> <span class="special">)</span>
+    <span class="special">{</span>
+        <span class="keyword">return</span> <span class="identifier">s</span> <span class="special">&lt;&lt;</span> <span class="string">"user_type"</span><span class="special">;</span>
+    <span class="special">}</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        The operator is found using <a href="http://en.wikipedia.org/wiki/Argument-dependent_name_lookup" target="_top">argument-dependent
+        name lookup</a> which means it needs to be in the namespace of either
+        one of its arguments. The easiest is to define it in the same namespace as
+        the type being serialized. If this is not possible (for instance when serializing
+        a type in namespace std because the C++ standard explicitly forbids adding
+        definitions into the std namespace) a serialization operator to mock::stream
+        can be in the mock namespace instead.
+      </p>
+<p>
+        The serialization operators detection doesn't attempt to do conversions when
+        looking for a match (because this can sometimes yield an ambiguous resolution
+        error). As conversions can prove convenient, for instance when dealing with
+        a base class which is derived to a lot of sub-classes, they can be activated
+        by defining MOCK_USE_CONVERSIONS prior to including the library :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">MOCK_USE_CONVERSIONS</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">turtle</span><span class="special">/</span><span class="identifier">mock</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+      </p>
+<p>
+        Be aware though that in this case the compiler can produce a compilation
+        error when attempting to detect whether serialization operators exist or
+        not. It is always possible however to define a serialization operator to
+        a mock::stream in order to bypass the detection.
+      </p>
+<p>
+        In all custom operator implementations it is probably a good thing to rely
+        on the same mechanism the library uses in order to log everything, for instance
+        here is how std::pair is handled :
+      </p>
+<pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">mock</span>
+<span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">T1</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">T2</span> <span class="special">&gt;</span>
+    <span class="identifier">mock</span><span class="special">::</span><span class="identifier">stream</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">&lt;&lt;(</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">stream</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span> <span class="identifier">T1</span><span class="special">,</span> <span class="identifier">T2</span> <span class="special">&gt;&amp;</span> <span class="identifier">p</span> <span class="special">)</span>
+    <span class="special">{</span>
+        <span class="keyword">return</span> <span class="identifier">s</span> <span class="special">&lt;&lt;</span> <span class="char">'('</span> <span class="special">&lt;&lt;</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">format</span><span class="special">(</span> <span class="identifier">p</span><span class="special">.</span><span class="identifier">first</span> <span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="char">','</span> <span class="special">&lt;&lt;</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">format</span><span class="special">(</span> <span class="identifier">p</span><span class="special">.</span><span class="identifier">second</span> <span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="char">')'</span><span class="special">;</span>
+    <span class="special">}</span>
+<span class="special">}</span>
+</pre>
+<p>
+        The interesting part is the call to mock::format which enables the whole
+        can-be-serialized-or-? logics.
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.customization.constraints"></a><a class="link" href="customization.html#turtle.customization.constraints" title="Constraints">Constraints</a>
+</h3></div></div></div>
+<p>
+        A constraint provides a means to validate a parameter received in a call
+        to a mock object.
+      </p>
+<p>
+        The library comes with a set of pre-defined <a class="link" href="reference.html#turtle.reference.expectation.constraints" title="Constraints">constraints</a>
+        matching the most widely used cases, however it is quite common to need to
+        perform a custom validation.
+      </p>
+<p>
+        Creating a constraint can be as simple as writing a function, for instance
+        :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">bool</span> <span class="identifier">custom_constraint</span><span class="special">(</span> <span class="keyword">int</span> <span class="identifier">actual</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">return</span> <span class="identifier">actual</span> <span class="special">==</span> <span class="number">42</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Any functor will actually do as long as its signature matches the requirement
+        : take a type convertible from the actual type and return a boolean.
+      </p>
+<p>
+        Using the custom constraint is also pretty trivial, for instance :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">forty_one_plus_one_is_forty_two</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_view</span> <span class="identifier">v</span><span class="special">;</span>
+    <span class="identifier">calculator</span> <span class="identifier">c</span><span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="special">&amp;</span><span class="identifier">custom_constraint</span> <span class="special">);</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">41</span><span class="special">,</span> <span class="number">1</span> <span class="special">);</span>
+ <span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Simple enough, however this constraint isn't serializable and thus yields
+        a rather uninformative '?' in the logs.
+      </p>
+<p>
+        Just like a parameter, a constraint can be displayed in a readable form using
+        its serialization operator, see <a class="link" href="customization.html#turtle.customization.logging" title="Logging">logging</a>.
+      </p>
+<p>
+        Thus a widely used constraint (for instance one shipped with the code of
+        a library) is likely better defined like this :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">custom_constraint</span>
+<span class="special">{</span>
+    <span class="keyword">friend</span> <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">==(</span> <span class="keyword">int</span> <span class="identifier">actual</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">custom_constraint</span><span class="special">&amp;</span> <span class="special">)</span>
+    <span class="special">{</span>
+        <span class="keyword">return</span> <span class="identifier">actual</span> <span class="special">==</span> <span class="number">42</span><span class="special">;</span>
+    <span class="special">}</span>
+
+    <span class="keyword">friend</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">&lt;&lt;(</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">custom_constraint</span><span class="special">&amp;</span> <span class="special">)</span>
+    <span class="special">{</span>
+        <span class="keyword">return</span> <span class="identifier">s</span> <span class="special">&lt;&lt;</span> <span class="string">"_ == 42"</span><span class="special">;</span>
+    <span class="special">}</span>
+<span class="special">};</span>
+</pre>
+<p>
+      </p>
+<p>
+        And of course the constraint is to be used in a slightly different way :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">forty_one_plus_one_is_forty_two</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_view</span> <span class="identifier">v</span><span class="special">;</span>
+    <span class="identifier">calculator</span> <span class="identifier">c</span><span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">custom_constraint</span><span class="special">()</span> <span class="special">);</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">41</span><span class="special">,</span> <span class="number">1</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Actually real world use cases sometimes need several other features as well
+        :
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            a state
+          </li>
+<li class="listitem">
+            (template) parameters
+          </li>
+<li class="listitem">
+            an operator with one or several (template) signatures
+          </li>
+</ul></div>
+<p>
+        Therefore a more realistic and complete example would be :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">Expected</span> <span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">near_constraint</span>
+<span class="special">{</span>
+    <span class="identifier">near_constraint</span><span class="special">(</span> <span class="identifier">Expected</span> <span class="identifier">expected</span><span class="special">,</span> <span class="identifier">Expected</span> <span class="identifier">threshold</span> <span class="special">)</span>
+      <span class="special">:</span> <span class="identifier">expected_</span><span class="special">(</span> <span class="identifier">expected</span> <span class="special">)</span>
+      <span class="special">,</span> <span class="identifier">threshold_</span><span class="special">(</span> <span class="identifier">threshold</span> <span class="special">)</span>
+    <span class="special">{}</span>
+
+    <span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">Actual</span> <span class="special">&gt;</span>
+    <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">()(</span> <span class="identifier">Actual</span> <span class="identifier">actual</span> <span class="special">)</span> <span class="keyword">const</span>
+    <span class="special">{</span>
+        <span class="keyword">return</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">abs</span><span class="special">(</span> <span class="identifier">actual</span> <span class="special">-</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">unwrap_ref</span><span class="special">(</span> <span class="identifier">expected_</span> <span class="special">)</span> <span class="special">)</span>
+            <span class="special">&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">unwrap_ref</span><span class="special">(</span> <span class="identifier">threshold_</span> <span class="special">);</span>
+    <span class="special">}</span>
+
+    <span class="keyword">friend</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">&lt;&lt;(</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">near_constraint</span><span class="special">&amp;</span> <span class="identifier">c</span> <span class="special">)</span>
+    <span class="special">{</span>
+        <span class="keyword">return</span> <span class="identifier">s</span> <span class="special">&lt;&lt;</span> <span class="string">"near( "</span> <span class="special">&lt;&lt;</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">format</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">expected_</span> <span class="special">)</span>
+            <span class="special">&lt;&lt;</span> <span class="string">", "</span> <span class="special">&lt;&lt;</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">format</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">threshold_</span> <span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="string">" )"</span><span class="special">;</span>
+    <span class="special">}</span>
+
+    <span class="identifier">Expected</span> <span class="identifier">expected_</span><span class="special">,</span> <span class="identifier">threshold_</span><span class="special">;</span>
+<span class="special">};</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">Expected</span> <span class="special">&gt;</span>
+<span class="identifier">mock</span><span class="special">::</span><span class="identifier">constraint</span><span class="special">&lt;</span> <span class="identifier">near_constraint</span><span class="special">&lt;</span> <span class="identifier">Expected</span> <span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">near</span><span class="special">(</span> <span class="identifier">Expected</span> <span class="identifier">expected</span><span class="special">,</span> <span class="identifier">Expected</span> <span class="identifier">threshold</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">return</span> <span class="identifier">near_constraint</span><span class="special">&lt;</span> <span class="identifier">Expected</span> <span class="special">&gt;(</span> <span class="identifier">expected</span><span class="special">,</span> <span class="identifier">threshold</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        And it would be used like this :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">forty_one_plus_one_is_forty_two_plus_or_minus_one</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_view</span> <span class="identifier">v</span><span class="special">;</span>
+   <span class="identifier">calculator</span> <span class="identifier">c</span><span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">near</span><span class="special">(</span> <span class="number">42</span><span class="special">,</span> <span class="number">1</span> <span class="special">)</span> <span class="special">);</span>
+   <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">41</span><span class="special">,</span> <span class="number">1</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        The purpose of the 'near' template function is to :
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            remove the burden of specifying the template parameter when instantiating
+            near_constraint
+          </li>
+<li class="listitem">
+            wrap the constraint in a mock::constraint so that it plays nicely with
+            !, &amp;&amp; and ||.
+          </li>
+</ul></div>
+<p>
+        The use of boost::unwrap_ref provides support for passing arguments as references
+        with boost::ref and boost::cref and delaying their initialization, for instance
+        :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">forty_one_plus_one_is_forty_two_plus_or_minus_one</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_view</span> <span class="identifier">v</span><span class="special">;</span>
+   <span class="identifier">calculator</span> <span class="identifier">c</span><span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>
+   <span class="keyword">int</span> <span class="identifier">expected</span><span class="special">,</span> <span class="identifier">threshold</span><span class="special">;</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">near</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cref</span><span class="special">(</span> <span class="identifier">expected</span> <span class="special">),</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cref</span><span class="special">(</span> <span class="identifier">threshold</span> <span class="special">)</span> <span class="special">)</span> <span class="special">);</span>
+   <span class="identifier">expected</span> <span class="special">=</span> <span class="number">42</span><span class="special">;</span>
+   <span class="identifier">threshold</span> <span class="special">=</span> <span class="number">1</span><span class="special">;</span>
+   <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">41</span><span class="special">,</span> <span class="number">1</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        See <a class="link" href="reference.html#turtle.reference.expectation.constraints" title="Constraints">constraints</a>
+        for an explanation of how the library detects whether an argument is a functor
+        or a value.
+      </p>
+<p>
+        For more information about the serialization operator and the use of mock::format,
+        refer to <a class="link" href="customization.html#turtle.customization.logging" title="Logging">loggin</a>.
+      </p>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          The <a class="link" href="reference.html#turtle.reference.constraint" title="Constraint">constraint helper macro</a>
+          takes care of everything for simple cases.
+        </p></td></tr>
+</table></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.customization.number_of_arguments"></a><a class="link" href="customization.html#turtle.customization.number_of_arguments" title="Number of arguments">Number of arguments</a>
+</h3></div></div></div>
+<p>
+        The maximum number of arguments a mocked method can have is defined by MOCK_MAX_ARGS.
+        By default this value is set to 9, but if needed it can be changed before
+        including the library :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">MOCK_MAX_ARGS</span> <span class="number">20</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">turtle</span><span class="special">/</span><span class="identifier">mock</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+      </p>
+<p>
+        This means methods with up to 20 arguments will then be accepted.
+      </p>
+<p>
+        The mock object library uses several boost libraries and will adjust some
+        of their constants if they haven't already been defined :
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Boost.Function with BOOST_FUNCTION_MAX_ARGS required at MOCK_MAX_ARGS
+            or higher
+          </li>
+<li class="listitem">
+            Boost.FunctionTypes with BOOST_FT_MAX_ARITY required at MOCK_MAX_ARGS
+            + 1 or higher
+          </li>
+<li class="listitem">
+            Boost.Phoenix (when increasing MOCK_MAX_ARGS over 9 otherwise Boost.Bind
+            is used) with PHOENIX_LIMIT required at MOCK_MAX_ARGS or higher
+          </li>
+</ul></div>
+<p>
+        A compilation error will happen if one of those constants is already defined
+        too low.
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.customization.test_framework_integration"></a><a class="link" href="customization.html#turtle.customization.test_framework_integration" title="Test framework integration">Test
+      framework integration</a>
+</h3></div></div></div>
+<p>
+        By default the library expects to be used in conjunction with Boost.Test
+        e.g. :
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            logs using the logger from Boost.Test
+          </li>
+<li class="listitem">
+            throws mock::exception deriving from boost::execution_aborted via boost::enable_current_exception
+          </li>
+<li class="listitem">
+            adds Boost.Test checkpoints whenever possible
+          </li>
+<li class="listitem">
+            verifies and resets all remaining (static or leaked objects) with a global
+            fixture
+          </li>
+</ul></div>
+<p>
+        However integrating with any given unit test framework can be done by defining
+        a custom error policy implementing the following concept :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">Result</span> <span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">custom_policy</span>
+<span class="special">{</span>
+    <span class="keyword">static</span> <span class="identifier">Result</span> <span class="identifier">abort</span><span class="special">()</span>
+    <span class="special">{</span>
+        <span class="comment">// ...</span>
+    <span class="special">}</span>
+    <span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">Context</span> <span class="special">&gt;</span>
+    <span class="keyword">static</span> <span class="keyword">void</span> <span class="identifier">fail</span><span class="special">(</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">message</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">Context</span><span class="special">&amp;</span> <span class="identifier">context</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">file</span> <span class="special">=</span> <span class="string">"unknown location"</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">line</span> <span class="special">=</span> <span class="number">0</span> <span class="special">)</span>
+    <span class="special">{</span>
+        <span class="comment">// ...</span>
+    <span class="special">}</span>
+    <span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">Context</span> <span class="special">&gt;</span>
+    <span class="keyword">static</span> <span class="keyword">void</span> <span class="identifier">call</span><span class="special">(</span> <span class="keyword">const</span> <span class="identifier">Context</span><span class="special">&amp;</span> <span class="identifier">context</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">file</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">line</span> <span class="special">)</span>
+    <span class="special">{</span>
+        <span class="comment">// ...</span>
+    <span class="special">}</span>
+    <span class="keyword">static</span> <span class="keyword">void</span> <span class="identifier">pass</span><span class="special">(</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">file</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">line</span> <span class="special">)</span>
+    <span class="special">{</span>
+        <span class="comment">// ...</span>
+    <span class="special">}</span>
+<span class="special">};</span>
+</pre>
+<p>
+      </p>
+<p>
+        The context, which stands for "something serializable to an std::ostream",
+        is actually built only if an attempt to serialize it is made, thus enabling
+        lazy serialization of all elements (e.g. constraints and parameters). File
+        and line show were the expectation has been configured.
+      </p>
+<p>
+        The policy can then be activated by defining MOCK_ERROR_POLICY prior to including
+        the library :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">MOCK_ERROR_POLICY</span> <span class="identifier">custom_policy</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">turtle</span><span class="special">/</span><span class="identifier">mock</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.customization.thread_safety"></a><a class="link" href="customization.html#turtle.customization.thread_safety" title="Thread safety">Thread safety</a>
+</h3></div></div></div>
+<p>
+        Thread safety is not activated by default however defining MOCK_THREAD_SAFE
+        before including the library will make creations and calls to mock objects
+        thread-safe :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">MOCK_THREAD_SAFE</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">turtle</span><span class="special">/</span><span class="identifier">mock</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+      </p>
+<p>
+        If available the library will rely on the C++11 standard mutexes and locks,
+        otherwise Boost.Thread will be used.
+      </p>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2008-2014 Mathieu Champlon<p>
+        Distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">Boost
+        Software License, Version 1.0</a>.
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="getting_started.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="reference.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Motivation</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<link rel="home" href="../index.html" title="Turtle">
+<link rel="up" href="../index.html" title="Turtle">
+<link rel="prev" href="../index.html" title="Turtle">
+<link rel="next" href="getting_started.html" title="Getting Started">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="" width="" height="" src="../images/boost.png"></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/files">Download</a></td>
+<td align="center"><a href="http://sourceforge.net/p/turtle/news">News</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/support">Support</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle">Project</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../index.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="getting_started.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="turtle.motivation"></a><a class="link" href="motivation.html" title="Motivation">Motivation</a>
+</h2></div></div></div>
+<p>
+      Consider a (very) simple calculator class :
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">calculator</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+    <span class="keyword">int</span> <span class="identifier">add</span><span class="special">(</span> <span class="keyword">int</span> <span class="identifier">a</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">b</span> <span class="special">);</span>
+<span class="special">};</span>
+</pre>
+<p>
+    </p>
+<p>
+      Obviously writing unit tests for such a class is trivial, one of them could
+      be :
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">zero_plus_zero_is_zero</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">calculator</span> <span class="identifier">c</span><span class="special">;</span>
+    <span class="identifier">BOOST_CHECK_EQUAL</span><span class="special">(</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span> <span class="special">)</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+    </p>
+<p>
+      What now if the calculator class looks more like this :
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">view</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+    <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="identifier">display</span><span class="special">(</span> <span class="keyword">int</span> <span class="identifier">result</span> <span class="special">)</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">};</span>
+</pre>
+<p>
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">calculator</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+    <span class="identifier">calculator</span><span class="special">(</span> <span class="identifier">view</span><span class="special">&amp;</span> <span class="identifier">v</span> <span class="special">);</span>
+
+    <span class="keyword">void</span> <span class="identifier">add</span><span class="special">(</span> <span class="keyword">int</span> <span class="identifier">a</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">b</span> <span class="special">);</span> <span class="comment">// the result will be sent to the view 'v'</span>
+<span class="special">};</span>
+</pre>
+<p>
+    </p>
+<p>
+      Writing unit tests becomes a bit more tedious and requires some boiler-plate
+      code, for instance :
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">my_view</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">view</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+    <span class="identifier">my_view</span><span class="special">()</span>
+        <span class="special">:</span> <span class="identifier">called</span><span class="special">(</span> <span class="keyword">false</span> <span class="special">)</span>
+    <span class="special">{}</span>
+    <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="identifier">display</span><span class="special">(</span> <span class="keyword">int</span> <span class="identifier">result</span> <span class="special">)</span>
+    <span class="special">{</span>
+        <span class="identifier">called</span> <span class="special">=</span> <span class="keyword">true</span><span class="special">;</span>
+        <span class="identifier">value</span> <span class="special">=</span> <span class="identifier">result</span><span class="special">;</span>
+    <span class="special">}</span>
+    <span class="keyword">bool</span> <span class="identifier">called</span><span class="special">;</span>
+    <span class="keyword">int</span> <span class="identifier">value</span><span class="special">;</span>
+<span class="special">};</span>
+</pre>
+<p>
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">zero_plus_zero_is_zero</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">my_view</span> <span class="identifier">v</span><span class="special">;</span>
+    <span class="identifier">calculator</span> <span class="identifier">c</span><span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span> <span class="special">);</span>
+    <span class="identifier">BOOST_REQUIRE</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">called</span> <span class="special">);</span>
+    <span class="identifier">BOOST_CHECK_EQUAL</span><span class="special">(</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">value</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+    </p>
+<p>
+      Mock objects main purpose is to alleviate the user from the burden of writing
+      all this boiler-plate code.
+    </p>
+<p>
+      Here is how the last test can be rewritten using a mock object :
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_BASE_CLASS</span><span class="special">(</span> <span class="identifier">mock_view</span><span class="special">,</span> <span class="identifier">view</span> <span class="special">)</span> <span class="comment">// declare a 'mock_view' class implementing 'view'</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">display</span><span class="special">,</span> <span class="number">1</span> <span class="special">)</span>      <span class="comment">// implement the 'display' method from 'view' (taking 1 argument)</span>
+<span class="special">};</span>
+</pre>
+<p>
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">zero_plus_zero_is_zero</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_view</span> <span class="identifier">v</span><span class="special">;</span>
+    <span class="identifier">calculator</span> <span class="identifier">c</span><span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">display</span> <span class="special">).</span><span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="number">0</span> <span class="special">);</span> <span class="comment">// expect the 'display' method to be called once (and only once) with a parameter value equal to 0</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="number">0</span><span class="special">,</span> <span class="number">0</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+    </p>
+<p>
+      and all the checks are automatically handled by the library.
+    </p>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2008-2014 Mathieu Champlon<p>
+        Distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">Boost
+        Software License, Version 1.0</a>.
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../index.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="getting_started.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

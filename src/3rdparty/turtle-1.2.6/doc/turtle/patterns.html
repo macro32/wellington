@@ -1,0 +1,301 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Patterns</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<link rel="home" href="../index.html" title="Turtle">
+<link rel="up" href="../index.html" title="Turtle">
+<link rel="prev" href="reference.html" title="Reference">
+<link rel="next" href="limitations.html" title="Limitations">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="" width="" height="" src="../images/boost.png"></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/files">Download</a></td>
+<td align="center"><a href="http://sourceforge.net/p/turtle/news">News</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/support">Support</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle">Project</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="reference.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="limitations.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="turtle.patterns"></a><a class="link" href="patterns.html" title="Patterns">Patterns</a>
+</h2></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="patterns.html#turtle.patterns.waiting_for_an_asynchronous_call">Waiting
+      for an asynchronous call</a></span></dt>
+<dt><span class="section"><a href="patterns.html#turtle.patterns.retrieving_an_argument_to_use_in_a_later_constraint">Retrieving
+      an argument to use in a later constraint</a></span></dt>
+<dt><span class="section"><a href="patterns.html#turtle.patterns.invoking_a_functor_received_as_parameter">Invoking
+      a functor received as parameter</a></span></dt>
+<dt><span class="section"><a href="patterns.html#turtle.patterns.quickly_writing_a_custom_constraint_for_a_serializable_type">Quickly
+      writing a custom constraint for a serializable type</a></span></dt>
+</dl></div>
+<p>
+      This section highlights not-so-obvious features of the library gathered from
+      real use cases.
+    </p>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.patterns.waiting_for_an_asynchronous_call"></a><a class="link" href="patterns.html#turtle.patterns.waiting_for_an_asynchronous_call" title="Waiting for an asynchronous call">Waiting
+      for an asynchronous call</a>
+</h3></div></div></div>
+<p>
+        Problem :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">namespace</span>
+<span class="special">{</span>
+    <span class="keyword">class</span> <span class="identifier">base_class</span>
+    <span class="special">{</span>
+    <span class="keyword">public</span><span class="special">:</span>
+        <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="identifier">method</span><span class="special">()</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+    <span class="special">};</span>
+
+    <span class="keyword">class</span> <span class="identifier">my_class</span>
+    <span class="special">{</span>
+    <span class="keyword">public</span><span class="special">:</span>
+        <span class="keyword">explicit</span> <span class="identifier">my_class</span><span class="special">(</span> <span class="identifier">base_class</span><span class="special">&amp;</span> <span class="special">);</span>
+
+        <span class="keyword">void</span> <span class="identifier">flush</span><span class="special">();</span> <span class="comment">// repetitively calling this method will in turn call base_class::method at some point</span>
+    <span class="special">};</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Solution :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_AUTO_TEST_MAIN</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">auto_unit_test</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">lambda</span><span class="special">/</span><span class="identifier">lambda</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">thread</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">turtle</span><span class="special">/</span><span class="identifier">mock</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">namespace</span>
+<span class="special">{</span>
+    <span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">F</span> <span class="special">&gt;</span>
+    <span class="keyword">void</span> <span class="identifier">wait</span><span class="special">(</span> <span class="keyword">bool</span><span class="special">&amp;</span> <span class="identifier">condition</span><span class="special">,</span> <span class="identifier">F</span> <span class="identifier">flush</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">timeout</span> <span class="special">=</span> <span class="number">100</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">sleep</span> <span class="special">=</span> <span class="number">100</span> <span class="special">)</span>
+    <span class="special">{</span>
+        <span class="keyword">while</span><span class="special">(</span> <span class="special">!</span><span class="identifier">condition</span> <span class="special">&amp;&amp;</span> <span class="identifier">timeout</span> <span class="special">&gt;</span> <span class="number">0</span> <span class="special">)</span>
+        <span class="special">{</span>
+            <span class="special">--</span><span class="identifier">timeout</span><span class="special">;</span>
+            <span class="identifier">boost</span><span class="special">::</span><span class="identifier">this_thread</span><span class="special">::</span><span class="identifier">sleep</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">posix_time</span><span class="special">::</span><span class="identifier">milliseconds</span><span class="special">(</span> <span class="identifier">sleep</span> <span class="special">)</span> <span class="special">);</span>
+            <span class="identifier">flush</span><span class="special">();</span>
+        <span class="special">}</span>
+    <span class="special">}</span>
+    <span class="identifier">MOCK_BASE_CLASS</span><span class="special">(</span> <span class="identifier">mock_base_class</span><span class="special">,</span> <span class="identifier">base_class</span> <span class="special">)</span>
+    <span class="special">{</span>
+        <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">0</span> <span class="special">)</span>
+    <span class="special">};</span>
+<span class="special">}</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">method_is_called</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_base_class</span> <span class="identifier">mock</span><span class="special">;</span>
+    <span class="identifier">my_class</span> <span class="identifier">c</span><span class="special">(</span> <span class="identifier">mock</span> <span class="special">);</span>
+    <span class="keyword">bool</span> <span class="identifier">done</span> <span class="special">=</span> <span class="keyword">false</span><span class="special">;</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">mock</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">once</span><span class="special">().</span><span class="identifier">calls</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">lambda</span><span class="special">::</span><span class="identifier">var</span><span class="special">(</span> <span class="identifier">done</span> <span class="special">)</span> <span class="special">=</span> <span class="keyword">true</span> <span class="special">);</span> <span class="comment">// when method is called it will set done to true</span>
+    <span class="identifier">wait</span><span class="special">(</span> <span class="identifier">done</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">bind</span><span class="special">(</span> <span class="special">&amp;</span><span class="identifier">my_class</span><span class="special">::</span><span class="identifier">flush</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">c</span> <span class="special">)</span> <span class="special">);</span>                            <span class="comment">// just wait on done, flushing from time to time</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.patterns.retrieving_an_argument_to_use_in_a_later_constraint"></a><a class="link" href="patterns.html#turtle.patterns.retrieving_an_argument_to_use_in_a_later_constraint" title="Retrieving an argument to use in a later constraint">Retrieving
+      an argument to use in a later constraint</a>
+</h3></div></div></div>
+<p>
+        Problem :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">namespace</span>
+<span class="special">{</span>
+    <span class="keyword">class</span> <span class="identifier">base_class</span>
+    <span class="special">{</span>
+    <span class="keyword">public</span><span class="special">:</span>
+        <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="identifier">method</span><span class="special">(</span> <span class="keyword">int</span> <span class="identifier">value</span> <span class="special">)</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+    <span class="special">};</span>
+
+    <span class="keyword">class</span> <span class="identifier">my_class</span>
+    <span class="special">{</span>
+    <span class="keyword">public</span><span class="special">:</span>
+        <span class="keyword">explicit</span> <span class="identifier">my_class</span><span class="special">(</span> <span class="identifier">base_class</span><span class="special">&amp;</span> <span class="special">);</span>
+
+        <span class="keyword">void</span> <span class="identifier">process</span><span class="special">();</span> <span class="comment">// the processing will call 'method' two times with the same value, but we don't know what value beforehand</span>
+    <span class="special">};</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Solution :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_AUTO_TEST_MAIN</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">auto_unit_test</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">turtle</span><span class="special">/</span><span class="identifier">mock</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">namespace</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_BASE_CLASS</span><span class="special">(</span> <span class="identifier">mock_base_class</span><span class="special">,</span> <span class="identifier">base_class</span> <span class="special">)</span>
+    <span class="special">{</span>
+        <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span> <span class="special">)</span>
+    <span class="special">};</span>
+<span class="special">}</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">method_is_called_two_times_with_the_same_value</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_base_class</span> <span class="identifier">mock</span><span class="special">;</span>
+    <span class="identifier">my_class</span> <span class="identifier">c</span><span class="special">(</span> <span class="identifier">mock</span> <span class="special">);</span>
+    <span class="keyword">int</span> <span class="identifier">value</span><span class="special">;</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">mock</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">retrieve</span><span class="special">(</span> <span class="identifier">value</span> <span class="special">)</span> <span class="special">);</span> <span class="comment">// on first call retrieve the value, this expectation takes precedence because it can never fail</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">mock</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cref</span><span class="special">(</span> <span class="identifier">value</span> <span class="special">)</span> <span class="special">);</span>    <span class="comment">// on second call compare the previously retrieved value with the newly received one</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">process</span><span class="special">();</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.patterns.invoking_a_functor_received_as_parameter"></a><a class="link" href="patterns.html#turtle.patterns.invoking_a_functor_received_as_parameter" title="Invoking a functor received as parameter">Invoking
+      a functor received as parameter</a>
+</h3></div></div></div>
+<p>
+        Problem :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">function</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">namespace</span>
+<span class="special">{</span>
+    <span class="keyword">class</span> <span class="identifier">base_class</span>
+    <span class="special">{</span>
+    <span class="keyword">public</span><span class="special">:</span>
+        <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="identifier">method</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">&gt;</span> <span class="identifier">functor</span> <span class="special">)</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+    <span class="special">};</span>
+
+    <span class="keyword">void</span> <span class="identifier">function</span><span class="special">(</span> <span class="identifier">base_class</span><span class="special">&amp;</span> <span class="special">);</span> <span class="comment">// the function will call 'method' with a functor to be applied</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Solution :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_AUTO_TEST_MAIN</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">auto_unit_test</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">bind</span><span class="special">/</span><span class="identifier">apply</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">turtle</span><span class="special">/</span><span class="identifier">mock</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">namespace</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_BASE_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span><span class="special">,</span> <span class="identifier">base_class</span> <span class="special">)</span>
+    <span class="special">{</span>
+        <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span> <span class="special">)</span>
+    <span class="special">};</span>
+<span class="special">}</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">how_to_invoke_a_functor_passed_as_parameter_of_a_mock_method</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_class</span> <span class="identifier">mock</span><span class="special">;</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">mock</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">calls</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">bind</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">apply</span><span class="special">&lt;</span> <span class="keyword">void</span> <span class="special">&gt;(),</span> <span class="identifier">_1</span><span class="special">,</span> <span class="number">42</span> <span class="special">)</span> <span class="special">);</span> <span class="comment">// whenever 'method' is called, invoke the functor with 42</span>
+    <span class="identifier">function</span><span class="special">(</span> <span class="identifier">mock</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.patterns.quickly_writing_a_custom_constraint_for_a_serializable_type"></a><a class="link" href="patterns.html#turtle.patterns.quickly_writing_a_custom_constraint_for_a_serializable_type" title="Quickly writing a custom constraint for a serializable type">Quickly
+      writing a custom constraint for a serializable type</a>
+</h3></div></div></div>
+<p>
+        Problem :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_AUTO_TEST_MAIN</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">auto_unit_test</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">turtle</span><span class="special">/</span><span class="identifier">mock</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+
+<span class="keyword">namespace</span>
+<span class="special">{</span>
+    <span class="keyword">class</span> <span class="identifier">my_class</span>
+    <span class="special">{</span>
+    <span class="keyword">public</span><span class="special">:</span>
+        <span class="keyword">explicit</span> <span class="identifier">my_class</span><span class="special">(</span> <span class="keyword">int</span> <span class="identifier">data</span> <span class="special">)</span>
+	    <span class="special">:</span> <span class="identifier">data_</span><span class="special">(</span> <span class="identifier">data</span> <span class="special">)</span>
+        <span class="special">{}</span>
+        <span class="keyword">int</span> <span class="identifier">data_</span><span class="special">;</span>
+    <span class="special">};</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream</span><span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">&lt;&lt;(</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream</span><span class="special">&amp;</span> <span class="identifier">os</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">my_class</span><span class="special">&amp;</span> <span class="identifier">c</span> <span class="special">)</span> <span class="comment">// my_class is serializable to an std::ostream</span>
+    <span class="special">{</span>
+        <span class="keyword">return</span> <span class="identifier">os</span> <span class="special">&lt;&lt;</span> <span class="string">"my_class( "</span> <span class="special">&lt;&lt;</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">data_</span> <span class="special">&lt;&lt;</span> <span class="string">" )"</span><span class="special">;</span>
+    <span class="special">}</span>
+
+    <span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">my_mock</span> <span class="special">)</span>
+    <span class="special">{</span>
+        <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">const</span> <span class="identifier">my_class</span><span class="special">&amp;</span> <span class="special">)</span> <span class="special">)</span> <span class="comment">// how to simply write a custom constraint ?</span>
+    <span class="special">};</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Solution :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">lexical_cast</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">namespace</span> <span class="identifier">mock</span> <span class="comment">// it could also be in the namespace of 'my_class'</span>
+<span class="special">{</span>
+    <span class="keyword">bool</span> <span class="keyword">operator</span><span class="special">==(</span> <span class="keyword">const</span> <span class="identifier">my_class</span><span class="special">&amp;</span> <span class="identifier">actual</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">expected</span> <span class="special">)</span> <span class="comment">// the first part of the trick is to compare to a string</span>
+    <span class="special">{</span>
+        <span class="keyword">return</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">lexical_cast</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&gt;(</span> <span class="identifier">actual</span> <span class="special">)</span> <span class="special">==</span> <span class="identifier">expected</span><span class="special">;</span>
+    <span class="special">}</span>
+<span class="special">}</span> <span class="comment">// mock</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">method_is_called</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">my_mock</span> <span class="identifier">mock</span><span class="special">;</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">mock</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="string">"my_class( 42 )"</span> <span class="special">);</span> <span class="comment">// the second part of the trick is to express the constraint as a string</span>
+    <span class="identifier">mock</span><span class="special">.</span><span class="identifier">method</span><span class="special">(</span> <span class="identifier">my_class</span><span class="special">(</span> <span class="number">42</span> <span class="special">)</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2008-2014 Mathieu Champlon<p>
+        Distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">Boost
+        Software License, Version 1.0</a>.
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="reference.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="limitations.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

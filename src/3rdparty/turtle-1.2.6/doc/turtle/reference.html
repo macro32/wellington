@@ -1,0 +1,2160 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Reference</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<link rel="home" href="../index.html" title="Turtle">
+<link rel="up" href="../index.html" title="Turtle">
+<link rel="prev" href="customization.html" title="Customization">
+<link rel="next" href="patterns.html" title="Patterns">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="" width="" height="" src="../images/boost.png"></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/files">Download</a></td>
+<td align="center"><a href="http://sourceforge.net/p/turtle/news">News</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/support">Support</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle">Project</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="customization.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="patterns.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="turtle.reference"></a><a class="link" href="reference.html" title="Reference">Reference</a>
+</h2></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation">Creation</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.class">Class</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.member_function">Member function</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.static_member_function">Static
+        member function</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.constructor">Constructor</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.destructor">Destructor</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.conversion_operator">Conversion
+        operator</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.function">Function</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.functor">Functor</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="reference.html#turtle.reference.expectation">Expectation</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="reference.html#turtle.reference.expectation.invocation">Invocation</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.expectation.constraints">Constraints</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.expectation.sequence">Sequence</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.expectation.actions">Actions</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="reference.html#turtle.reference.verification">Verification</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.reset">Reset</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.constraint">Constraint</a></span></dt>
+</dl></div>
+<p>
+      This section describes the library syntax exhaustively.
+    </p>
+<p>
+      All source code snippets assume the following prerequisite :
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_AUTO_TEST_MAIN</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">auto_unit_test</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">turtle</span><span class="special">/</span><span class="identifier">mock</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+    </p>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.reference.creation"></a><a class="link" href="reference.html#turtle.reference.creation" title="Creation">Creation</a>
+</h3></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.class">Class</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.member_function">Member function</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.static_member_function">Static
+        member function</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.constructor">Constructor</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.destructor">Destructor</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.conversion_operator">Conversion
+        operator</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.function">Function</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.creation.functor">Functor</a></span></dt>
+</dl></div>
+<p>
+        Mock objects can be assigned and copied around freely, unless they derive
+        from a type which disables it.
+      </p>
+<p>
+        Copies of a mock object share the same internal state, meaning setting an
+        expectation on one of them will impact all of them. Thus it is possible to
+        let an object under test copy a mock object and still be able to set, verify
+        or reset expectations.
+      </p>
+<p>
+        The library defines a set of convenient macros for creating mock objects
+        of different kinds :
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            classes
+          </li>
+<li class="listitem">
+            functors
+          </li>
+<li class="listitem">
+            functions
+          </li>
+</ul></div>
+<p>
+        Creating a mock object involves two parts under the hood :
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            defining an object
+          </li>
+<li class="listitem">
+            declaring an identifier for manipulating the object
+          </li>
+</ul></div>
+<p>
+        Most of the time the identifier will be identical to the object name, but
+        in case of ambiguity (for instance overloaded methods) a different identifier
+        will have to be specified.
+      </p>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          Creating a mock object creates a new object and does not magically replace
+          existing ones, for instance creating a mock function will not replace an
+          already existing function with the same name and signature.
+        </p></td></tr>
+</table></div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="turtle.reference.creation.class"></a><a class="link" href="reference.html#turtle.reference.creation.class" title="Class">Class</a>
+</h4></div></div></div>
+<p>
+          Synopsis :
+        </p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">name</span> <span class="special">)</span>            <span class="comment">// defines a class</span>
+<span class="identifier">MOCK_BASE_CLASS</span><span class="special">(</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">base</span> <span class="special">)</span> <span class="comment">// defines a class deriving from a base class</span>
+</pre>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_instantiating_a_mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">T</span> <span class="special">&gt;</span>
+<span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_instantiating_a_template_mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_class</span><span class="special">&lt;</span> <span class="keyword">int</span> <span class="special">&gt;</span> <span class="identifier">c</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">base_class</span>
+<span class="special">{};</span>
+
+<span class="identifier">MOCK_BASE_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span><span class="special">,</span> <span class="identifier">base_class</span> <span class="special">)</span>
+<span class="special">{};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_instantiating_a_derived_mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">T</span> <span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">base_class</span>
+<span class="special">{};</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">T</span> <span class="special">&gt;</span>
+<span class="identifier">MOCK_BASE_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span><span class="special">,</span> <span class="identifier">base_class</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="special">)</span>
+<span class="special">{};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_instantiating_a_template_derived_mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_class</span><span class="special">&lt;</span> <span class="keyword">int</span> <span class="special">&gt;</span> <span class="identifier">c</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          The preferred form for defining a mock class is with using MOCK_CLASS and
+          MOCK_BASE_CLASS, however equivalent alternatives exist without the macros.
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">name</span> <span class="special">:</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">object</span> <span class="comment">// equivalent to using MOCK_CLASS</span>
+<span class="special">{};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">T</span> <span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">name</span> <span class="special">:</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">object</span> <span class="comment">// equivalent to using MOCK_CLASS</span>
+<span class="special">{};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">class</span> <span class="identifier">base</span>
+<span class="special">{};</span>
+
+<span class="keyword">struct</span> <span class="identifier">name</span> <span class="special">:</span> <span class="identifier">base</span><span class="special">,</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">object</span> <span class="comment">// equivalent to using MOCK_BASE_CLASS</span>
+<span class="special">{</span>
+    <span class="keyword">typedef</span> <span class="identifier">base</span> <span class="identifier">base_type</span><span class="special">;</span>      <span class="comment">// this is required for MOCK_METHOD to work when not using MOCK_BASE_CLASS</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">T</span> <span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">base</span>
+<span class="special">{};</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">T</span> <span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">mock</span> <span class="special">:</span> <span class="identifier">base</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;,</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">object</span>
+<span class="special">{</span>
+    <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">base</span><span class="special">&lt;</span> <span class="identifier">T</span> <span class="special">&gt;</span> <span class="identifier">base_type</span><span class="special">;</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Deriving from mock::object is optional but provides the additional following
+          benefits :
+        </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+              the object acts as a composite to <a class="link" href="reference.html#turtle.reference.verification" title="Verification">verify</a>
+              and <a class="link" href="reference.html#turtle.reference.reset" title="Reset">reset</a> all the expectations
+              for all its methods at once
+            </li>
+<li class="listitem">
+              logs involving the object are enhanced because configuring an expectation
+              for a method will set the class name for all the other methods as well
+            </li>
+</ul></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="turtle.reference.creation.member_function"></a><a class="link" href="reference.html#turtle.reference.creation.member_function" title="Member function">Member function</a>
+</h4></div></div></div>
+<p>
+          Synopsis :
+        </p>
+<pre class="programlisting"><span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">[,</span> <span class="identifier">signature</span><span class="special">[,</span> <span class="identifier">identifier</span><span class="special">]]</span> <span class="special">)</span>               <span class="comment">// generates both const and non-const methods</span>
+<span class="identifier">MOCK_CONST_METHOD</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">[,</span> <span class="identifier">signature</span><span class="special">[,</span> <span class="identifier">identifier</span><span class="special">]]</span> <span class="special">)</span>         <span class="comment">// generates only the const version of the method</span>
+<span class="identifier">MOCK_NON_CONST_METHOD</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">[,</span> <span class="identifier">signature</span><span class="special">[,</span> <span class="identifier">identifier</span><span class="special">]]</span> <span class="special">)</span>     <span class="comment">// generates only the non-const version of the method</span>
+
+<span class="identifier">MOCK_METHOD_TPL</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">[,</span> <span class="identifier">signature</span><span class="special">[,</span> <span class="identifier">identifier</span><span class="special">]]</span> <span class="special">)</span>           <span class="comment">// must be used if the signature uses a template parameter of the class, generates both const and non-const methods</span>
+<span class="identifier">MOCK_CONST_METHOD_TPL</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">[,</span> <span class="identifier">signature</span><span class="special">[,</span> <span class="identifier">identifier</span><span class="special">]]</span> <span class="special">)</span>     <span class="comment">// must be used if the signature uses a template parameter of the class, generates only the const version of the method</span>
+<span class="identifier">MOCK_NON_CONST_METHOD_TPL</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">[,</span> <span class="identifier">signature</span><span class="special">[,</span> <span class="identifier">identifier</span><span class="special">]]</span> <span class="special">)</span> <span class="comment">// must be used if the signature uses a template parameter of the class, generates only the non-const version of the method</span>
+</pre>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            If the identifier is omitted it will default to the method name.
+          </p></td></tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            If the method name is not ambiguous both the signature and the identifier
+            can be omitted in the context of a derived MOCK_BASE_CLASS or base_type
+            typedef.
+          </p></td></tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            The signature must be surrounded with round parenthesis if the return
+            type contains a comma.
+          </p></td></tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            <a class="link" href="reference.html#turtle.reference.creation.constructor" title="Constructor">Constructors</a>,
+            <a class="link" href="reference.html#turtle.reference.creation.destructor" title="Destructor">destructors</a>
+            and <a class="link" href="reference.html#turtle.reference.creation.conversion_operator" title="Conversion operator">conversion
+            operators</a> require special care.
+          </p></td></tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            In case of a calling convention specified, all four parameters must be
+            provided.
+          </p></td></tr>
+</table></div>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            For compilers without support for variadic macros the MOCK_METHOD_EXT
+            familly set of macros must be used.
+          </p></td></tr>
+</table></div>
+<p>
+          Synopsis :
+        </p>
+<pre class="programlisting"><span class="identifier">MOCK_METHOD_EXT</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">,</span> <span class="identifier">signature</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span>               <span class="comment">// generates both const and non-const methods</span>
+<span class="identifier">MOCK_CONST_METHOD_EXT</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">,</span> <span class="identifier">signature</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span>         <span class="comment">// generates only the const version of the method</span>
+<span class="identifier">MOCK_NON_CONST_METHOD_EXT</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">,</span> <span class="identifier">signature</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span>     <span class="comment">// generates only the non-const version of the method</span>
+
+<span class="identifier">MOCK_METHOD_EXT_TPL</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">,</span> <span class="identifier">signature</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span>           <span class="comment">// must be used if the signature uses a template parameter of the class, generates both const and non-const methods</span>
+<span class="identifier">MOCK_CONST_METHOD_EXT_TPL</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">,</span> <span class="identifier">signature</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span>     <span class="comment">// must be used if the signature uses a template parameter of the class, generates only the const version of the method</span>
+<span class="identifier">MOCK_NON_CONST_METHOD_EXT_TPL</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">,</span> <span class="identifier">signature</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span> <span class="comment">// must be used if the signature uses a template parameter of the class, generates only the non-const version of the method</span>
+</pre>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">base_class</span>
+<span class="special">{</span>
+    <span class="keyword">virtual</span> <span class="special">~</span><span class="identifier">base_class</span><span class="special">()</span>
+    <span class="special">{}</span>
+    <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="identifier">method</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">};</span>
+
+<span class="identifier">MOCK_BASE_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span><span class="special">,</span> <span class="identifier">base_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span> <span class="special">)</span>              <span class="comment">// only possible when referring unambiguously to a base class method</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">base_class</span>
+<span class="special">{</span>
+    <span class="keyword">virtual</span> <span class="special">~</span><span class="identifier">base_class</span><span class="special">()</span>
+    <span class="special">{}</span>
+    <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="identifier">method</span><span class="special">(</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="special">)</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+    <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="identifier">method</span><span class="special">(</span> <span class="keyword">float</span> <span class="special">)</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">};</span>
+
+<span class="identifier">MOCK_BASE_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span><span class="special">,</span> <span class="identifier">base_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="special">),</span> <span class="identifier">identifier_1</span> <span class="special">)</span> <span class="comment">// both the signature and identifier must be specified because of ambiguity due to overloading</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">float</span> <span class="special">),</span> <span class="identifier">identifier_2</span> <span class="special">)</span>                   <span class="comment">// the identifier must differ from the previous one in order to fully disambiguate methods</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">base_class</span>
+<span class="special">{</span>
+    <span class="keyword">virtual</span> <span class="special">~</span><span class="identifier">base_class</span><span class="special">()</span>
+    <span class="special">{}</span>
+    <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="identifier">method</span><span class="special">(</span> <span class="keyword">float</span> <span class="special">)</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+    <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="identifier">method</span><span class="special">(</span> <span class="keyword">float</span> <span class="special">)</span> <span class="keyword">const</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">};</span>
+
+<span class="identifier">MOCK_BASE_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span><span class="special">,</span> <span class="identifier">base_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">float</span> <span class="special">)</span> <span class="special">)</span> <span class="comment">// this generates both const and non-const versions</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">base_class</span>
+<span class="special">{</span>
+    <span class="keyword">virtual</span> <span class="special">~</span><span class="identifier">base_class</span><span class="special">()</span>
+    <span class="special">{}</span>
+    <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="identifier">method</span><span class="special">(</span> <span class="keyword">float</span> <span class="special">)</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+    <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="identifier">method</span><span class="special">(</span> <span class="keyword">float</span> <span class="special">)</span> <span class="keyword">const</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">};</span>
+
+<span class="identifier">MOCK_BASE_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span><span class="special">,</span> <span class="identifier">base_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_CONST_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">float</span> <span class="special">),</span> <span class="identifier">identifier_1</span> <span class="special">)</span>     <span class="comment">// this generates only the const version</span>
+    <span class="identifier">MOCK_NON_CONST_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">float</span> <span class="special">),</span> <span class="identifier">identifier_2</span> <span class="special">)</span> <span class="comment">// this generates only the non-const version, with a different identifier</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_NON_CONST_METHOD</span><span class="special">(</span> <span class="keyword">operator</span><span class="special">=,</span> <span class="number">1</span><span class="special">,</span> <span class="identifier">mock_class</span><span class="special">&amp;(</span> <span class="keyword">const</span> <span class="identifier">mock_class</span><span class="special">&amp;</span> <span class="special">),</span> <span class="identifier">assignment</span> <span class="special">)</span> <span class="comment">// operators require a custom identifier</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">T</span> <span class="special">&gt;</span>
+<span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD_TPL</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="special">)</span> <span class="special">)</span> <span class="comment">// the _TPL variants must be used if the signature includes a template parameter of the class</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span> <span class="special">&gt;())</span> <span class="special">)</span> <span class="comment">// the signature must be surrounded with round parenthesis if the return type contains a comma</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example for msvc :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">__stdcall</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(),</span> <span class="identifier">method</span> <span class="special">)</span> <span class="comment">// all parameters must be provided when specifying a different calling convention</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example for gcc :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">__attribute</span><span class="special">((</span><span class="identifier">stdcall</span><span class="special">))</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(),</span> <span class="identifier">method</span> <span class="special">)</span> <span class="comment">// all parameters must be provided when specifying a different calling convention</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="turtle.reference.creation.static_member_function"></a><a class="link" href="reference.html#turtle.reference.creation.static_member_function" title="Static member function">Static
+        member function</a>
+</h4></div></div></div>
+<p>
+          Synopsis :
+        </p>
+<pre class="programlisting"><span class="identifier">MOCK_STATIC_METHOD</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">,</span> <span class="identifier">signature</span><span class="special">[,</span> <span class="identifier">identifier</span><span class="special">]</span> <span class="special">)</span>     <span class="comment">// if 'identifier' is omitted it will default to 'name'</span>
+
+<span class="identifier">MOCK_STATIC_METHOD_TPL</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">,</span> <span class="identifier">signature</span><span class="special">[,</span> <span class="identifier">identifier</span><span class="special">]</span> <span class="special">)</span> <span class="comment">// must be used if the signature uses a template parameter of the class, if 'identifier' is omitted it will default to 'name'</span>
+</pre>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            A static object is used behind the scene in order to keep track of the
+            expectations of a mock static method, therefore to ensure all tests run
+            in isolation it is strongly suggested to manually <a class="link" href="reference.html#turtle.reference.verification" title="Verification">verify</a>
+            and <a class="link" href="reference.html#turtle.reference.reset" title="Reset">reset</a> the static method
+            at the end of each test.
+          </p></td></tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            In case of a calling convention specified, all four parameters must be
+            provided.
+          </p></td></tr>
+</table></div>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            For compilers without support for variadic macros the identifier cannot
+            be omitted and must be given explicitly.
+          </p></td></tr>
+</table></div>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_STATIC_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">float</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">)</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">T</span> <span class="special">&gt;</span>
+<span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_STATIC_METHOD_TPL</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="identifier">T</span> <span class="special">)</span> <span class="special">)</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example for msvc :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_STATIC_METHOD</span><span class="special">(</span> <span class="identifier">__stdcall</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(),</span> <span class="identifier">method</span> <span class="special">)</span> <span class="comment">// all parameters must be provided when specifying a different calling convention</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example for gcc :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_STATIC_METHOD</span><span class="special">(</span> <span class="identifier">__attribute</span><span class="special">((</span><span class="identifier">stdcall</span><span class="special">))</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(),</span> <span class="identifier">method</span> <span class="special">)</span> <span class="comment">// all parameters must be provided when specifying a different calling convention</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="turtle.reference.creation.constructor"></a><a class="link" href="reference.html#turtle.reference.creation.constructor" title="Constructor">Constructor</a>
+</h4></div></div></div>
+<p>
+          Synopsis :
+        </p>
+<pre class="programlisting"><span class="identifier">MOCK_CONSTRUCTOR</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">,</span> <span class="identifier">parameters</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span>
+
+<span class="identifier">MOCK_CONSTRUCTOR_TPL</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">,</span> <span class="identifier">parameters</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span> <span class="comment">// must be used if the signature uses a template parameter of the class</span>
+</pre>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            As constructors do not have a return type, the usual signature gets restricted
+            here to just the parameters.
+          </p></td></tr>
+</table></div>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_CONSTRUCTOR</span><span class="special">(</span> <span class="identifier">mock_class</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="special">(</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="special">),</span> <span class="identifier">identifier</span> <span class="special">)</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">T</span> <span class="special">&gt;</span>
+<span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_CONSTRUCTOR</span><span class="special">(</span> <span class="identifier">mock_class</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="special">(</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="special">),</span> <span class="identifier">identifier</span> <span class="special">)</span>
+    <span class="identifier">MOCK_CONSTRUCTOR_TPL</span><span class="special">(</span> <span class="identifier">mock_class</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="special">(</span> <span class="identifier">T</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="special">),</span> <span class="identifier">identifier</span> <span class="special">)</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example for msvc :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_CONSTRUCTOR</span><span class="special">(</span> <span class="identifier">__stdcall</span> <span class="identifier">mock_class</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="special">(),</span> <span class="identifier">constructor</span> <span class="special">)</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example for gcc :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_CONSTRUCTOR</span><span class="special">(</span> <span class="identifier">__attribute</span><span class="special">((</span><span class="identifier">stdcall</span><span class="special">))</span> <span class="identifier">mock_class</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="special">(),</span> <span class="identifier">constructor</span> <span class="special">)</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="turtle.reference.creation.destructor"></a><a class="link" href="reference.html#turtle.reference.creation.destructor" title="Destructor">Destructor</a>
+</h4></div></div></div>
+<p>
+          Synopsis :
+        </p>
+<pre class="programlisting"><span class="identifier">MOCK_DESTRUCTOR</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="special">~</span><span class="identifier">name</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span>
+</pre>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            When mocking a destructor it is strongly suggested to manually <a class="link" href="reference.html#turtle.reference.verification" title="Verification">verify</a> the expectation
+            at the end of the test, because the automatic verification will not be
+            triggered if the mock object is not destroyed.
+          </p></td></tr>
+</table></div>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_DESTRUCTOR</span><span class="special">(</span> <span class="special">~</span><span class="identifier">mock_class</span><span class="special">,</span> <span class="identifier">destructor</span> <span class="special">)</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example for msvc :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_DESTRUCTOR</span><span class="special">(</span> <span class="identifier">__stdcall</span> <span class="special">~</span><span class="identifier">mock_class</span><span class="special">,</span> <span class="identifier">destructor</span> <span class="special">)</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example for gcc :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_DESTRUCTOR</span><span class="special">(</span> <span class="identifier">__attribute</span><span class="special">((</span><span class="identifier">stdcall</span><span class="special">))</span> <span class="special">~</span><span class="identifier">mock_class</span><span class="special">,</span> <span class="identifier">destructor</span> <span class="special">)</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="turtle.reference.creation.conversion_operator"></a><a class="link" href="reference.html#turtle.reference.creation.conversion_operator" title="Conversion operator">Conversion
+        operator</a>
+</h4></div></div></div>
+<p>
+          Synopsis :
+        </p>
+<pre class="programlisting"><span class="identifier">MOCK_CONVERSION_OPERATOR</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">type</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span>               <span class="comment">// generates both const and non-const operators</span>
+<span class="identifier">MOCK_CONST_CONVERSION_OPERATOR</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">type</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span>         <span class="comment">// generates only a const operator</span>
+<span class="identifier">MOCK_NON_CONST_CONVERSION_OPERATOR</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">type</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span>     <span class="comment">// generates only a non-const operator</span>
+
+<span class="identifier">MOCK_CONVERSION_OPERATOR_TPL</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">type</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span>           <span class="comment">// must be used if the signature uses a template parameter of the class</span>
+<span class="identifier">MOCK_CONST_CONVERSION_OPERATOR_TPL</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">type</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span>     <span class="comment">// must be used if the signature uses a template parameter of the class</span>
+<span class="identifier">MOCK_NON_CONST_CONVERSION_OPERATOR_TPL</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">type</span><span class="special">,</span> <span class="identifier">identifier</span> <span class="special">)</span> <span class="comment">// must be used if the signature uses a template parameter of the class</span>
+</pre>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_CONVERSION_OPERATOR</span><span class="special">(</span> <span class="keyword">operator</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">conversion_to_int</span> <span class="special">)</span>
+    <span class="identifier">MOCK_CONST_CONVERSION_OPERATOR</span><span class="special">(</span> <span class="keyword">operator</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;,</span> <span class="identifier">conversion_to_string</span> <span class="special">)</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">T</span> <span class="special">&gt;</span>
+<span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_CONVERSION_OPERATOR_TPL</span><span class="special">(</span> <span class="keyword">operator</span><span class="special">,</span> <span class="identifier">T</span><span class="special">,</span> <span class="identifier">conversion_to_T</span> <span class="special">)</span>                                       <span class="comment">// the _TPL variants must be used if the signature includes a template parameter of the class</span>
+    <span class="identifier">MOCK_CONST_CONVERSION_OPERATOR</span><span class="special">(</span> <span class="keyword">operator</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;,</span> <span class="identifier">const_conversion_to_string</span> <span class="special">)</span>
+    <span class="identifier">MOCK_NON_CONST_CONVERSION_OPERATOR</span><span class="special">(</span> <span class="keyword">operator</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;,</span> <span class="identifier">non_const_conversion_to_string</span> <span class="special">)</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example for msvc :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_CONVERSION_OPERATOR</span><span class="special">(</span> <span class="identifier">__stdcall</span> <span class="keyword">operator</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">conversion_to_int</span> <span class="special">)</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example for gcc :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_CONVERSION_OPERATOR</span><span class="special">(</span> <span class="identifier">__attribute</span><span class="special">((</span><span class="identifier">stdcall</span><span class="special">))</span> <span class="keyword">operator</span><span class="special">,</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">conversion_to_int</span> <span class="special">)</span>
+<span class="special">};</span>
+</pre>
+<p>
+        </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="turtle.reference.creation.function"></a><a class="link" href="reference.html#turtle.reference.creation.function" title="Function">Function</a>
+</h4></div></div></div>
+<p>
+          Synopsis :
+        </p>
+<pre class="programlisting"><span class="identifier">MOCK_FUNCTION</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">,</span> <span class="identifier">signature</span><span class="special">[,</span> <span class="identifier">identifier</span><span class="special">]</span> <span class="special">)</span> <span class="comment">// if 'identifier' is omitted it will default to 'name'</span>
+</pre>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            A static object is used behind the scene in order to keep track of the
+            expectations of a mock function, therefore to ensure all tests run in
+            isolation it is strongly suggested to manually <a class="link" href="reference.html#turtle.reference.verification" title="Verification">verify</a>
+            and <a class="link" href="reference.html#turtle.reference.reset" title="Reset">reset</a> the mock function
+            at the end of each test.
+          </p></td></tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            In case of a calling convention specified, all four parameters must be
+            provided.
+          </p></td></tr>
+</table></div>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            For compilers without support for variadic macros the identifier cannot
+            be omitted and must be given explicitly.
+          </p></td></tr>
+</table></div>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_FUNCTION</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">float</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">)</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_instantiating_a_mock_function</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">f</span><span class="special">(</span> <span class="number">3</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example for msvc :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_FUNCTION</span><span class="special">(</span> <span class="identifier">__stdcall</span> <span class="identifier">f</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(),</span> <span class="identifier">f</span> <span class="special">)</span> <span class="comment">// all parameters must be provided when specifying a different calling convention</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example for gcc :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_FUNCTION</span><span class="special">(</span> <span class="identifier">__attribute</span><span class="special">((</span><span class="identifier">stdcall</span><span class="special">))</span> <span class="identifier">f</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(),</span> <span class="identifier">f</span> <span class="special">)</span> <span class="comment">// all parameters must be provided when specifying a different calling convention</span>
+</pre>
+<p>
+        </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="turtle.reference.creation.functor"></a><a class="link" href="reference.html#turtle.reference.creation.functor" title="Functor">Functor</a>
+</h4></div></div></div>
+<p>
+          Synopsis :
+        </p>
+<pre class="programlisting"><span class="identifier">MOCK_FUNCTOR</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">signature</span> <span class="special">);</span>
+
+<span class="identifier">MOCK_FUNCTOR_TPL</span><span class="special">(</span> <span class="special">[</span><span class="identifier">calling</span> <span class="identifier">convention</span><span class="special">]</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">signature</span> <span class="special">);</span> <span class="comment">// must be used if the signature uses a template parameter</span>
+</pre>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_instantiating_a_mock_functor</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">MOCK_FUNCTOR</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">);</span>
+   <span class="identifier">f</span><span class="special">(</span> <span class="number">3</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">typename</span> <span class="identifier">T</span> <span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">mock_class</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_FUNCTOR_TPL</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="identifier">T</span> <span class="special">)</span> <span class="special">);</span>
+<span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_instantiating_a_mock_functor</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_class</span><span class="special">&lt;</span> <span class="keyword">int</span> <span class="special">&gt;</span> <span class="identifier">c</span><span class="special">;</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">f</span><span class="special">(</span> <span class="number">3</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+</div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.reference.expectation"></a><a class="link" href="reference.html#turtle.reference.expectation" title="Expectation">Expectation</a>
+</h3></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="reference.html#turtle.reference.expectation.invocation">Invocation</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.expectation.constraints">Constraints</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.expectation.sequence">Sequence</a></span></dt>
+<dt><span class="section"><a href="reference.html#turtle.reference.expectation.actions">Actions</a></span></dt>
+</dl></div>
+<p>
+        An expectation is a statement of configuration for a mock object.
+      </p>
+<p>
+        Synopsis :
+      </p>
+<pre class="programlisting"><span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">).</span><a class="link" href="reference.html#turtle.reference.expectation.invocation" title="Invocation">invocation</a><span class="special">(</span> <span class="identifier">arguments</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <a class="link" href="reference.html#turtle.reference.expectation.constraints" title="Constraints">constraints</a> <span class="special">).</span><span class="identifier">in</span><span class="special">(</span> <a class="link" href="reference.html#turtle.reference.expectation.sequence" title="Sequence">sequences</a> <span class="special">).</span><a class="link" href="reference.html#turtle.reference.expectation.actions" title="Actions">action</a><span class="special">(</span> <span class="identifier">value</span> <span class="special">);</span>
+</pre>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          The identifier refers to the one specified when <a class="link" href="reference.html#turtle.reference.creation" title="Creation">creating</a>
+          a mock object.
+        </p></td></tr>
+</table></div>
+<p>
+        Example :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">int</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">),</span> <span class="identifier">method</span> <span class="special">)</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;,</span> <span class="keyword">float</span> <span class="special">),</span> <span class="identifier">method2</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_configuring_mock_objects</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+    <span class="identifier">mock</span><span class="special">::</span><span class="identifier">sequence</span> <span class="identifier">s</span><span class="special">;</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">once</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="number">0</span> <span class="special">).</span><span class="identifier">in</span><span class="special">(</span> <span class="identifier">s</span> <span class="special">).</span><span class="identifier">returns</span><span class="special">(</span> <span class="number">42</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method2</span> <span class="special">).</span><span class="identifier">never</span><span class="special">().</span><span class="identifier">with</span><span class="special">(</span> <span class="string">"ok"</span><span class="special">,</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">any</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method2</span> <span class="special">).</span><span class="identifier">at_least</span><span class="special">(</span> <span class="number">2</span> <span class="special">).</span><span class="identifier">in</span><span class="special">(</span> <span class="identifier">s</span> <span class="special">).</span><span class="identifier">throws</span><span class="special">(</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span><span class="special">(</span> <span class="string">"error !"</span> <span class="special">)</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="turtle.reference.expectation.invocation"></a><a class="link" href="reference.html#turtle.reference.expectation.invocation" title="Invocation">Invocation</a>
+</h4></div></div></div>
+<p>
+          An invocation defines how many times a mock object is to be exercised.
+        </p>
+<p>
+          Synopsis :
+        </p>
+<pre class="programlisting"><span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">);</span>                     <span class="comment">// any number of times including never</span>
+<span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">).</span><span class="identifier">once</span><span class="special">();</span>
+<span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">).</span><span class="identifier">never</span><span class="special">();</span>
+<span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">).</span><span class="identifier">exactly</span><span class="special">(</span> <span class="identifier">count</span> <span class="special">);</span>
+<span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">).</span><span class="identifier">at_least</span><span class="special">(</span> <span class="identifier">min</span> <span class="special">);</span>
+<span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">).</span><span class="identifier">at_most</span><span class="special">(</span> <span class="identifier">max</span> <span class="special">);</span>
+<span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">).</span><span class="identifier">between</span><span class="special">(</span> <span class="identifier">min</span><span class="special">,</span> <span class="identifier">max</span> <span class="special">);</span> <span class="comment">// throws std::invalid_argument if 'min' &gt; 'max'</span>
+</pre>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="special">)</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_setting_up_invocations_on_a_mock_method</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">once</span><span class="special">();</span> <span class="comment">// can only be called once</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">);</span>        <span class="comment">// can be called an unlimited number of times</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_setting_up_an_invocation_on_a_mock_functor</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_FUNCTOR</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="special">)</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">).</span><span class="identifier">once</span><span class="special">();</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_FUNCTION</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">float</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">)</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_setting_up_an_invocation_on_a_mock_function</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">).</span><span class="identifier">once</span><span class="special">();</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_STATIC_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">float</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_setting_up_an_invocation_on_a_mock_static_method</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">once</span><span class="special">();</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">mock_class</span><span class="special">::</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">once</span><span class="special">();</span> <span class="comment">// does the same</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="turtle.reference.expectation.constraints"></a><a class="link" href="reference.html#turtle.reference.expectation.constraints" title="Constraints">Constraints</a>
+</h4></div></div></div>
+<p>
+          A constraint validates the actual parameter value of a call to a mock object.
+        </p>
+<p>
+          Synopsis :
+        </p>
+<pre class="programlisting"><span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">constraint_1</span><span class="special">,</span> <span class="identifier">constraint_2</span><span class="special">,</span> <span class="special">...</span> <span class="special">);</span>
+</pre>
+<p>
+          The number of constraints must match the number of mocked parameters.
+        </p>
+<p>
+          Constraints :
+        </p>
+<div class="informaltable"><table class="table">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+                  <p>
+                    Constraint
+                  </p>
+                </th>
+<th>
+                  <p>
+                    Effect
+                  </p>
+                </th>
+<th>
+                  <p>
+                    Description
+                  </p>
+                </th>
+</tr></thead>
+<tbody>
+<tr>
+<td>
+                  <p>
+                    mock::any
+                  </p>
+                </td>
+<td>
+                  <p>
+                    true
+                  </p>
+                </td>
+<td>
+                  <p>
+                    does not perform any verification
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    <span class="emphasis"><em>expected</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em>expected</em></span>( <span class="emphasis"><em>actual</em></span> )
+                  </p>
+                  <p>
+                    <span class="emphasis"><em>actual</em></span> == <span class="emphasis"><em>expected</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    calls <span class="emphasis"><em>expected</em></span> as a functor returning a
+                    <span class="emphasis"><em>bool</em></span>, throws std::invalid_argument if !
+                    <span class="emphasis"><em>expected</em></span>
+                  </p>
+                  <p>
+                    compares <span class="emphasis"><em>actual</em></span> to <span class="emphasis"><em>expected</em></span>
+                    using operator ==
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::equal( <span class="emphasis"><em>expected</em></span> )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em>actual</em></span> == <span class="emphasis"><em>expected</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    compares <span class="emphasis"><em>actual</em></span> to <span class="emphasis"><em>expected</em></span>
+                    using operator ==
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::less( <span class="emphasis"><em>expected</em></span> )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em>actual</em></span> &lt; <span class="emphasis"><em>expected</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    compares <span class="emphasis"><em>actual</em></span> to <span class="emphasis"><em>expected</em></span>
+                    using operator &lt;
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::greater( <span class="emphasis"><em>expected</em></span> )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em>actual</em></span> &gt; <span class="emphasis"><em>expected</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    compares <span class="emphasis"><em>actual</em></span> to <span class="emphasis"><em>expected</em></span>
+                    using operator &gt;
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::less_equal( <span class="emphasis"><em>expected</em></span> )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em>actual</em></span> &lt;= <span class="emphasis"><em>expected</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    compares <span class="emphasis"><em>actual</em></span> to <span class="emphasis"><em>expected</em></span>
+                    using operator &lt;=
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::greater_equal( <span class="emphasis"><em>expected</em></span> )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em>actual</em></span> &gt;= <span class="emphasis"><em>expected</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    compares <span class="emphasis"><em>actual</em></span> to <span class="emphasis"><em>expected</em></span>
+                    using operator &gt;=
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::near( <span class="emphasis"><em>expected</em></span>, <span class="emphasis"><em>tolerance</em></span>
+                    )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    std::abs( <span class="emphasis"><em>actual</em></span> - <span class="emphasis"><em>expected</em></span>
+                    ) &lt; <span class="emphasis"><em>tolerance</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    checks whether <span class="emphasis"><em>actual</em></span> is near <span class="emphasis"><em>expected</em></span>
+                    within <span class="emphasis"><em>tolerance</em></span>
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::close( <span class="emphasis"><em>expected</em></span>, <span class="emphasis"><em>tolerance</em></span>
+                    )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    boost::test_tools::check_is_close( <span class="emphasis"><em>actual</em></span>,
+                    <span class="emphasis"><em>expected</em></span>, boost::test_tools::percent_tolerance(
+                    <span class="emphasis"><em>arg</em></span> ) )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    checks whether <span class="emphasis"><em>actual</em></span> is close to <span class="emphasis"><em>expected</em></span>,
+                    see <a href="http://www.boost.org/libs/test/doc/html/utf/testing-tools/floating_point_comparison.html" target="_top">Floating-point
+                    comparison algorithms</a>
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::close_fraction( <span class="emphasis"><em>expected</em></span>, <span class="emphasis"><em>tolerance</em></span>
+                    )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    boost::test_tools::check_is_close( <span class="emphasis"><em>actual</em></span>,
+                    <span class="emphasis"><em>expected</em></span>, boost::test_tools::fraction_tolerance(
+                    <span class="emphasis"><em>arg</em></span> ) )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    checks whether <span class="emphasis"><em>actual</em></span> is close to <span class="emphasis"><em>expected</em></span>,
+                    see <a href="http://www.boost.org/libs/test/doc/html/utf/testing-tools/floating_point_comparison.html" target="_top">Floating-point
+                    comparison algorithms</a>
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::small( <span class="emphasis"><em>tolerance</em></span> )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    boost::test_tools::check_is_small( <span class="emphasis"><em>actual</em></span>,
+                    <span class="emphasis"><em>expected</em></span> ) )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    checks whether <span class="emphasis"><em>actual</em></span> is small within <span class="emphasis"><em>tolerance</em></span>,
+                    see <a href="http://www.boost.org/libs/test/doc/html/utf/testing-tools/floating_point_comparison.html" target="_top">Floating-point
+                    comparison algorithms</a>
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::call( <span class="emphasis"><em>expected</em></span> )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em>expected</em></span>( <span class="emphasis"><em>actual</em></span> )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    calls <span class="emphasis"><em>expected</em></span> as a functor returning a
+                    <span class="emphasis"><em>bool</em></span> and accepting <span class="emphasis"><em>actual</em></span>
+                    as parameter
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::same( <span class="emphasis"><em>expected</em></span> )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    &amp;<span class="emphasis"><em>actual</em></span> == &amp;<span class="emphasis"><em>expected</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    compares <span class="emphasis"><em>actual</em></span> to <span class="emphasis"><em>expected</em></span>
+                    by comparing their pointers
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::assign( <span class="emphasis"><em>expected</em></span> )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em>actual</em></span> = <span class="emphasis"><em>expected</em></span>,
+                    true
+                  </p>
+                  <p>
+                    *<span class="emphasis"><em>actual</em></span> = <span class="emphasis"><em>expected</em></span>,
+                    true
+                  </p>
+                </td>
+<td>
+                  <p>
+                    assigns <span class="emphasis"><em>expected</em></span> to <span class="emphasis"><em>actual</em></span>
+                    using operator =
+                  </p>
+                  <p>
+                    assigns <span class="emphasis"><em>expected</em></span> to <span class="emphasis"><em>actual</em></span>
+                    content using operator =
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::retrieve( <span class="emphasis"><em>expected</em></span> )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em>expected</em></span> = <span class="emphasis"><em>actual</em></span>,
+                    true
+                  </p>
+                  <p>
+                    <span class="emphasis"><em>expected</em></span> = &amp;<span class="emphasis"><em>actual</em></span>,
+                    true
+                  </p>
+                </td>
+<td>
+                  <p>
+                    retrieves <span class="emphasis"><em>actual</em></span> into <span class="emphasis"><em>expected</em></span>
+                    using operator =
+                  </p>
+                  <p>
+                    retrieves <span class="emphasis"><em>actual</em></span> address into <span class="emphasis"><em>expected</em></span>
+                    using operator =
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::contain( <span class="emphasis"><em>expected</em></span> )
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em>actual</em></span>.find( <span class="emphasis"><em>expected</em></span>
+                    ) != std::string::npos
+                  </p>
+                </td>
+<td>
+                  <p>
+                    checks whether <span class="emphasis"><em>expected</em></span> is contained in
+                    the std::string <span class="emphasis"><em>actual</em></span>
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::affirm
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em>actual</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    uses <span class="emphasis"><em>actual</em></span> as a boolean
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::negate
+                  </p>
+                </td>
+<td>
+                  <p>
+                    ! <span class="emphasis"><em>actual</em></span>
+                  </p>
+                </td>
+<td>
+                  <p>
+                    negates <span class="emphasis"><em>actual</em></span> using operator !
+                  </p>
+                </td>
+</tr>
+<tr>
+<td>
+                  <p>
+                    mock::evaluate
+                  </p>
+                </td>
+<td>
+                  <p>
+                    <span class="emphasis"><em>actual</em></span>()
+                  </p>
+                </td>
+<td>
+                  <p>
+                    evaluates <span class="emphasis"><em>actual</em></span> as a functor returning
+                    a bool and taking no argument
+                  </p>
+                </td>
+</tr>
+</tbody>
+</table></div>
+<div class="important"><table border="0" summary="Important">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../images/important.png"></td>
+<th align="left">Important</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            When passing <span class="emphasis"><em>expected</em></span> directly as a shortcut mock::call
+            is implied for a function, a function pointer, an instance of a type
+            with a result_type member typedef (support for standard library, <a href="http://www.boost.org/libs/bind/bind.html" target="_top">Boost.Bind</a>, <a href="http://www.boost.org/libs/function" target="_top">Boost.Function</a> functors),
+            an instance of a type with a sig member (support for <a href="http://www.boost.org/libs/lambda" target="_top">Boost.Lambda</a>
+            functors), an instance of a type with a result member (support for <a href="http://www.boost.org/libs/phoenix" target="_top">Boost.Phoenix</a> functors);
+            mock::equal is implied for anything else.
+          </p></td></tr>
+</table></div>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            Because mock::assign and mock::retrieve have side effects they may modify
+            <span class="emphasis"><em>expected</em></span> in unexpected ways. For instance they may
+            be called again after their expectations have already been exhausted
+            because of the way the <a class="link" href="getting_started.html#turtle.getting_started.expectation_selection_algorithm" title="Expectation selection algorithm">expectation
+            selection algorithm</a> works. Therefore it is probably a good idea
+            to use an <a class="link" href="reference.html#turtle.reference.expectation.actions" title="Actions">action</a>
+            instead.
+          </p></td></tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            For mock::assign and mock::retrieve the switch to one form or another
+            is made depending on whichever is the most relevant based on types involved.
+          </p></td></tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            All constraints accepting a parameter support the use of boost::ref and
+            boost::cref in order to delay initialization.
+          </p></td></tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+            All constraints can be combined using the &amp;&amp; and || operators,
+            as well as negated with the ! operator.
+          </p></td></tr>
+</table></div>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="special">)</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_adding_builtin_constraints</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">equal</span><span class="special">(</span> <span class="number">3</span> <span class="special">),</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">equal</span><span class="special">(</span> <span class="string">"some string"</span> <span class="special">)</span> <span class="special">);</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="number">3</span><span class="special">,</span> <span class="string">"some string"</span> <span class="special">);</span>                               <span class="comment">// equivalent to the previous one using short-cuts</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example using a function pointer :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="keyword">bool</span> <span class="identifier">custom_constraint</span><span class="special">(</span> <span class="keyword">int</span> <span class="identifier">actual</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="keyword">return</span> <span class="identifier">actual</span> <span class="special">==</span> <span class="number">42</span><span class="special">;</span>
+<span class="special">}</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_adding_a_custom_constraint_with_a_free_function</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="special">&amp;</span><span class="identifier">custom_constraint</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example using a standard library functor :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="keyword">bool</span> <span class="identifier">custom_constraint</span><span class="special">(</span> <span class="keyword">int</span> <span class="identifier">expected</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">actual</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="keyword">return</span> <span class="identifier">expected</span> <span class="special">==</span> <span class="identifier">actual</span><span class="special">;</span>
+<span class="special">}</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_adding_a_custom_constraint_with_a_standard_library_functor</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">bind1st</span><span class="special">(</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">ptr_fun</span><span class="special">(</span> <span class="special">&amp;</span><span class="identifier">custom_constraint</span> <span class="special">),</span> <span class="number">42</span> <span class="special">)</span> <span class="special">);</span> <span class="comment">// std::ptr_fun creates an std::unary_function</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example using <a href="http://www.boost.org/libs/bind" target="_top">Boost.Bind</a>
+          :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="keyword">bool</span> <span class="identifier">custom_constraint</span><span class="special">(</span> <span class="keyword">int</span> <span class="identifier">expected</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">actual</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="keyword">return</span> <span class="identifier">expected</span> <span class="special">==</span> <span class="identifier">actual</span><span class="special">;</span>
+<span class="special">}</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_adding_a_custom_constraint_with_boost_bind</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">bind</span><span class="special">(</span> <span class="special">&amp;</span><span class="identifier">custom_constraint</span><span class="special">,</span> <span class="number">42</span><span class="special">,</span> <span class="identifier">_1</span> <span class="special">)</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example using <a href="http://www.boost.org/libs/lambda" target="_top">Boost.Lambda</a>
+          :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_adding_a_custom_constraint_with_boost_lambda</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">lambda</span><span class="special">::</span><span class="identifier">_1</span> <span class="special">==</span> <span class="number">42</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example using <a href="http://www.boost.org/libs/phoenix" target="_top">Boost.Phoenix</a>
+          :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_adding_a_custom_constraint_with_boost_phoenix</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">phoenix</span><span class="special">::</span><span class="identifier">arg_names</span><span class="special">::</span><span class="identifier">arg1</span> <span class="special">==</span> <span class="number">42</span> <span class="special">);</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">phoenix</span><span class="special">::</span><span class="identifier">arg_names</span><span class="special">::</span><span class="identifier">_1</span> <span class="special">==</span> <span class="number">42</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example using C++11 lambdas :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_adding_a_constraint_with_cxx11_lambda</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="special">[](</span> <span class="keyword">int</span> <span class="identifier">actual</span> <span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="number">42</span> <span class="special">==</span> <span class="identifier">actual</span><span class="special">;</span> <span class="special">}</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+<p>
+          Example using &amp;&amp;, || and ! :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="special">)</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_combining_constraints</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">less</span><span class="special">(</span> <span class="number">4</span> <span class="special">)</span> <span class="special">&amp;&amp;</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">greater</span><span class="special">(</span> <span class="number">2</span> <span class="special">),</span> <span class="special">!</span> <span class="identifier">mock</span><span class="special">::</span><span class="identifier">equal</span><span class="special">(</span> <span class="string">""</span> <span class="special">)</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="turtle.reference.expectation.sequence"></a><a class="link" href="reference.html#turtle.reference.expectation.sequence" title="Sequence">Sequence</a>
+</h4></div></div></div>
+<p>
+          A sequence enforces a given order between two or more expectations.
+        </p>
+<p>
+          Synopsis :
+        </p>
+<pre class="programlisting"><span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">identifier_1</span> <span class="special">).</span><span class="identifier">in</span><span class="special">(</span> <span class="identifier">sequence_1</span><span class="special">,</span> <span class="identifier">sequence_2</span><span class="special">,</span> <span class="special">...</span> <span class="special">);</span>
+</pre>
+<p>
+          Each sequence is an instance of mock::sequence.
+        </p>
+<p>
+          The maximum number of sequences that can be set is MOCK_MAX_SEQUENCES which
+          defaults to 10. If needed the value can be increased before including the
+          library :
+        </p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">MOCK_MAX_SEQUENCES</span> <span class="number">12</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">turtle</span><span class="special">/</span><span class="identifier">mock</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class_1</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method_1</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="keyword">void</span><span class="special">()</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class_2</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method_2</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="keyword">void</span><span class="special">()</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class_3</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method_3</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="keyword">void</span><span class="special">()</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_enforcing_several_expectation_orders</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_class_1</span> <span class="identifier">c_1</span><span class="special">;</span>
+   <span class="identifier">mock_class_2</span> <span class="identifier">c_2</span><span class="special">;</span>
+   <span class="identifier">mock_class_3</span> <span class="identifier">c_3</span><span class="special">;</span>
+   <span class="identifier">mock</span><span class="special">::</span><span class="identifier">sequence</span> <span class="identifier">s_1</span><span class="special">,</span> <span class="identifier">s_2</span><span class="special">;</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c_1</span><span class="special">.</span><span class="identifier">method_1</span> <span class="special">).</span><span class="identifier">in</span><span class="special">(</span> <span class="identifier">s_1</span> <span class="special">);</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c_2</span><span class="special">.</span><span class="identifier">method_2</span> <span class="special">).</span><span class="identifier">in</span><span class="special">(</span> <span class="identifier">s_2</span> <span class="special">);</span>      <span class="comment">// c_1.method_1 and c_2.method_2 are in different sequences and can be called in any order</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c_3</span><span class="special">.</span><span class="identifier">method_3</span> <span class="special">).</span><span class="identifier">in</span><span class="special">(</span> <span class="identifier">s_1</span><span class="special">,</span> <span class="identifier">s_2</span> <span class="special">);</span> <span class="comment">// c_3.method_3 must be called after both c_1.method_1 and c_2.method_2</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="turtle.reference.expectation.actions"></a><a class="link" href="reference.html#turtle.reference.expectation.actions" title="Actions">Actions</a>
+</h4></div></div></div>
+<p>
+          An action performs additional treatments after an expectation has been
+          deemed valid.
+        </p>
+<p>
+          Synopsis :
+        </p>
+<pre class="programlisting"><span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">).</span><span class="identifier">returns</span><span class="special">(</span> <span class="identifier">value</span> <span class="special">);</span>
+<span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">).</span><span class="identifier">moves</span><span class="special">(</span> <span class="identifier">value</span> <span class="special">);</span>
+<span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">).</span><span class="identifier">throws</span><span class="special">(</span> <span class="identifier">exception</span> <span class="special">);</span>
+<span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">).</span><span class="identifier">calls</span><span class="special">(</span> <span class="identifier">functor</span> <span class="special">);</span>    <span class="comment">// gets assigned to a boost::function and throws std::invalid_argument if empty</span>
+</pre>
+<p>
+          Example :
+        </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">int</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="keyword">int</span> <span class="identifier">function</span><span class="special">(</span> <span class="keyword">int</span> <span class="identifier">i</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">return</span> <span class="identifier">i</span><span class="special">;</span>
+<span class="special">}</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_configuring_actions</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">returns</span><span class="special">(</span> <span class="number">42</span> <span class="special">);</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">moves</span><span class="special">(</span> <span class="number">42</span> <span class="special">);</span>                               <span class="comment">// returns by moving the value</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">throws</span><span class="special">(</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">runtime_error</span><span class="special">(</span> <span class="string">"error !"</span> <span class="special">)</span> <span class="special">);</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">calls</span><span class="special">(</span> <span class="special">&amp;</span><span class="identifier">function</span> <span class="special">);</span>                        <span class="comment">// forwards 'method' parameter to 'function'</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">calls</span><span class="special">(</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">bind</span><span class="special">(</span> <span class="special">&amp;</span><span class="identifier">function</span><span class="special">,</span> <span class="number">42</span> <span class="special">)</span> <span class="special">);</span>     <span class="comment">// drops 'method' parameter and binds 42 as parameter to 'function'</span>
+   <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">).</span><span class="identifier">calls</span><span class="special">(</span> <span class="special">[](</span> <span class="keyword">int</span> <span class="identifier">i</span> <span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">i</span><span class="special">;</span> <span class="special">}</span> <span class="special">);</span>        <span class="comment">// uses a C++11 lambda</span>
+<span class="special">}</span>
+</pre>
+<p>
+        </p>
+</div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.reference.verification"></a><a class="link" href="reference.html#turtle.reference.verification" title="Verification">Verification</a>
+</h3></div></div></div>
+<p>
+        Synopsis :
+      </p>
+<pre class="programlisting"><span class="identifier">MOCK_VERIFY</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">);</span>
+<span class="identifier">mock</span><span class="special">::</span><span class="identifier">verify</span><span class="special">(</span> <span class="identifier">object</span> <span class="special">);</span>   <span class="comment">// verifies all expectations for all methods of 'object' which must be an instance of a class created using MOCK_CLASS or MOCK_BASE_CLASS, or inherit mock::object</span>
+<span class="identifier">mock</span><span class="special">::</span><span class="identifier">verify</span><span class="special">(</span> <span class="identifier">functor</span> <span class="special">);</span>  <span class="comment">// verifies all expectations for 'functor' which must be an instance of a functor created using MOCK_FUNCTOR</span>
+<span class="identifier">mock</span><span class="special">::</span><span class="identifier">verify</span><span class="special">();</span>           <span class="comment">// verifies all expectations for all mock objects, functions and functors</span>
+</pre>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          These calls all return a boolean indicating whether the verification was
+          successful or not, however usually simply calling them is enough because
+          a failing verification will be logged to the test framework.
+        </p></td></tr>
+</table></div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          Each mock object verifies itself automatically upon destruction, which
+          is usually sufficient for the most common use cases.
+        </p></td></tr>
+</table></div>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+          Using <a class="link" href="reference.html#turtle.reference.creation.function" title="Function">mock functions</a>
+          or <a class="link" href="reference.html#turtle.reference.creation.static_member_function" title="Static member function">mock
+          static member functions</a> means the associated underlying objects
+          will not be destroyed before exiting the test application, thus it is strongly
+          suggested to verify (and possibly <a class="link" href="reference.html#turtle.reference.reset" title="Reset">reset</a>)
+          them at the end of each test case (for instance using a fixture) to ensure
+          that each test runs in isolation.
+        </p></td></tr>
+</table></div>
+<p>
+        Example :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="keyword">void</span><span class="special">()</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_verifying_a_mock_method</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+   <span class="identifier">MOCK_VERIFY</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">);</span> <span class="comment">// logs an error and returns false if not all expectations are met</span>
+   <span class="identifier">mock</span><span class="special">::</span><span class="identifier">verify</span><span class="special">(</span> <span class="identifier">c</span> <span class="special">);</span>       <span class="comment">// verifies all expectations set for all methods of 'c'</span>
+   <span class="identifier">mock</span><span class="special">::</span><span class="identifier">verify</span><span class="special">();</span>          <span class="comment">// verifies all existing mock objects, functions and functors</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Example :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_verifying_a_mock_functor</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">MOCK_FUNCTOR</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">);</span>
+   <span class="identifier">MOCK_VERIFY</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">);</span>               <span class="comment">// logs an error and returns false if not all expectations are met</span>
+   <span class="identifier">mock</span><span class="special">::</span><span class="identifier">verify</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">);</span>              <span class="comment">// behaves the same as MOCK_VERIFY</span>
+   <span class="identifier">mock</span><span class="special">::</span><span class="identifier">verify</span><span class="special">();</span>                 <span class="comment">// verifies all existing mock objects, functions and functors</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Example :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_FUNCTION</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">)</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_verifying_a_mock_function</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">MOCK_VERIFY</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">);</span> <span class="comment">// logs an error and returns false if not all expectations are met</span>
+   <span class="identifier">mock</span><span class="special">::</span><span class="identifier">verify</span><span class="special">();</span>   <span class="comment">// verifies all existing mock objects, functions and functors</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Example :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_STATIC_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="keyword">void</span><span class="special">()</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_verifying_a_static_mock_method</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+   <span class="identifier">MOCK_VERIFY</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">);</span>           <span class="comment">// logs an error and returns false if not all expectations are met</span>
+   <span class="identifier">MOCK_VERIFY</span><span class="special">(</span> <span class="identifier">mock_class</span><span class="special">::</span><span class="identifier">method</span> <span class="special">);</span> <span class="comment">// does the same</span>
+   <span class="identifier">mock</span><span class="special">::</span><span class="identifier">verify</span><span class="special">();</span>                    <span class="comment">// verifies all existing mock objects, functions and functors</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.reference.reset"></a><a class="link" href="reference.html#turtle.reference.reset" title="Reset">Reset</a>
+</h3></div></div></div>
+<p>
+        Synopsis :
+      </p>
+<pre class="programlisting"><span class="identifier">MOCK_RESET</span><span class="special">(</span> <span class="identifier">identifier</span> <span class="special">);</span>
+<span class="identifier">mock</span><span class="special">::</span><span class="identifier">reset</span><span class="special">(</span> <span class="identifier">object</span> <span class="special">);</span>    <span class="comment">// resets all expectations for all methods of 'object' which must be an instance of a class created using MOCK_CLASS or MOCK_BASE_CLASS, or inherit mock::object</span>
+<span class="identifier">mock</span><span class="special">::</span><span class="identifier">reset</span><span class="special">(</span> <span class="identifier">functor</span> <span class="special">);</span>   <span class="comment">// resets all expectations for 'functor' which must be an instance of a functor created using MOCK_FUNCTOR</span>
+<span class="identifier">mock</span><span class="special">::</span><span class="identifier">reset</span><span class="special">();</span>            <span class="comment">// resets all expectations for all mock objects, functions and functors</span>
+</pre>
+<p>
+        Example :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="keyword">void</span><span class="special">()</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_resetting_a_mock_method</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+   <span class="identifier">MOCK_RESET</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">);</span> <span class="comment">// resets all expectations set for 'c.method'</span>
+   <span class="identifier">mock</span><span class="special">::</span><span class="identifier">reset</span><span class="special">(</span> <span class="identifier">c</span> <span class="special">);</span>       <span class="comment">// resets all expectations set on 'c'</span>
+   <span class="identifier">mock</span><span class="special">::</span><span class="identifier">reset</span><span class="special">();</span>          <span class="comment">// resets all existing mock objects, functions and functors</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Example :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_resetting_a_mock_functor</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">MOCK_FUNCTOR</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">);</span>
+   <span class="identifier">MOCK_RESET</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">);</span>                <span class="comment">// resets all expectations set for 'f'</span>
+   <span class="identifier">mock</span><span class="special">::</span><span class="identifier">reset</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">);</span>               <span class="comment">// behaves the same as MOCK_RESET</span>
+   <span class="identifier">mock</span><span class="special">::</span><span class="identifier">reset</span><span class="special">();</span>                  <span class="comment">// resets all existing mock objects, functions and functors</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Example :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_FUNCTION</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">)</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_resetting_a_mock_function</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">MOCK_RESET</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">);</span> <span class="comment">// resets all expectations set for 'f'</span>
+   <span class="identifier">mock</span><span class="special">::</span><span class="identifier">reset</span><span class="special">();</span>   <span class="comment">// resets all existing mock objects, functions and functors</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Example :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CLASS</span><span class="special">(</span> <span class="identifier">mock_class</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_STATIC_METHOD</span><span class="special">(</span> <span class="identifier">method</span><span class="special">,</span> <span class="number">0</span><span class="special">,</span> <span class="keyword">void</span><span class="special">()</span> <span class="special">)</span>
+<span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">demonstrates_resetting_a_static_mock_method</span> <span class="special">)</span>
+<span class="special">{</span>
+   <span class="identifier">mock_class</span> <span class="identifier">c</span><span class="special">;</span>
+   <span class="identifier">MOCK_RESET</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">method</span> <span class="special">);</span>           <span class="comment">// resets all expectations set for 'c::method'</span>
+   <span class="identifier">MOCK_RESET</span><span class="special">(</span> <span class="identifier">mock_class</span><span class="special">::</span><span class="identifier">method</span> <span class="special">);</span> <span class="comment">// resets all expectations set for 'c::method'</span>
+   <span class="identifier">mock</span><span class="special">::</span><span class="identifier">reset</span><span class="special">();</span>                    <span class="comment">// resets all existing mock objects, functions and functors</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.reference.constraint"></a><a class="link" href="reference.html#turtle.reference.constraint" title="Constraint">Constraint</a>
+</h3></div></div></div>
+<p>
+        This section presents a simple means of creating a new constraint.
+      </p>
+<p>
+        Synopsis :
+      </p>
+<pre class="programlisting"><span class="identifier">MOCK_CONSTRAINT</span><span class="special">(</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">expected_1</span><span class="special">,</span> <span class="identifier">expected_2</span><span class="special">,</span> <span class="special">...,</span> <span class="identifier">expression</span> <span class="special">)</span> <span class="comment">// defines a constraint 'name' based on the given 'expression'</span>
+</pre>
+<p>
+        The expression manipulates a received parameter <span class="emphasis"><em>actual</em></span>
+        in order to implement the constraint, as well as extra optional arguments
+        named <span class="emphasis"><em>expected_1</em></span>, <span class="emphasis"><em>expected_2</em></span>, ...
+      </p>
+<p>
+        For compilers without support for variadic macros the alternate following
+        macro must be used.
+      </p>
+<p>
+        Synopsis :
+      </p>
+<pre class="programlisting"><span class="identifier">MOCK_CONSTRAINT_EXT</span><span class="special">(</span> <span class="identifier">name</span><span class="special">,</span> <span class="identifier">arity</span><span class="special">,</span> <span class="special">(</span> <span class="identifier">expected_1</span><span class="special">,</span> <span class="identifier">expected_2</span><span class="special">,</span> <span class="special">...</span> <span class="special">),</span> <span class="identifier">expression</span> <span class="special">)</span> <span class="comment">// defines a constraint 'name' based on the given 'expression'</span>
+</pre>
+<p>
+        Of course this macro is also available for compilers which support variadic
+        macros.
+      </p>
+<p>
+        Example without any extra argument :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CONSTRAINT</span><span class="special">(</span> <span class="identifier">any</span><span class="special">,</span> <span class="keyword">true</span> <span class="special">)</span>               <span class="comment">// this is how mock::any could be defined</span>
+<span class="identifier">MOCK_CONSTRAINT</span><span class="special">(</span> <span class="identifier">forty_two</span><span class="special">,</span> <span class="identifier">actual</span> <span class="special">==</span> <span class="number">42</span> <span class="special">)</span> <span class="comment">// this defines a 'forty_two' constraint</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">mock_constraint_0_arity</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_FUNCTOR</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">forty_two</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">any</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        or with the alternate more portable macro :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CONSTRAINT_EXT</span><span class="special">(</span> <span class="identifier">any</span><span class="special">,</span> <span class="number">0</span><span class="special">,,</span> <span class="keyword">true</span> <span class="special">)</span>               <span class="comment">// this is (almost) how mock::any is defined</span>
+<span class="identifier">MOCK_CONSTRAINT_EXT</span><span class="special">(</span> <span class="identifier">forty_two</span><span class="special">,</span> <span class="number">0</span><span class="special">,,</span> <span class="identifier">actual</span> <span class="special">==</span> <span class="number">42</span> <span class="special">)</span> <span class="comment">// this defines a 'forty_two' constraint</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">mock_constraint_0_arity</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_FUNCTOR</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">forty_two</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">any</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Example with one extra argument :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CONSTRAINT</span><span class="special">(</span> <span class="identifier">equal</span><span class="special">,</span> <span class="identifier">expected</span><span class="special">,</span> <span class="identifier">actual</span> <span class="special">==</span> <span class="identifier">expected</span> <span class="special">)</span>                  <span class="comment">// this is how mock::equal could be defined</span>
+<span class="identifier">MOCK_CONSTRAINT</span><span class="special">(</span> <span class="identifier">near</span><span class="special">,</span> <span class="identifier">expected</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">abs</span><span class="special">(</span> <span class="identifier">actual</span> <span class="special">-</span> <span class="identifier">expected</span> <span class="special">)</span> <span class="special">&lt;</span> <span class="number">0.01</span> <span class="special">)</span> <span class="comment">// this defines a 'near' constraint which can be used as 'near( 42 )'</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">mock_constraint_1_arity</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_FUNCTOR</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">near</span><span class="special">(</span> <span class="number">42</span> <span class="special">)</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">equal</span><span class="special">(</span> <span class="number">42</span> <span class="special">)</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        or with the alternate more portable macro :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CONSTRAINT_EXT</span><span class="special">(</span> <span class="identifier">equal</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="special">(</span> <span class="identifier">expected</span> <span class="special">),</span> <span class="identifier">actual</span> <span class="special">==</span> <span class="identifier">expected</span> <span class="special">)</span>                  <span class="comment">// this is how mock::equal is defined</span>
+<span class="identifier">MOCK_CONSTRAINT_EXT</span><span class="special">(</span> <span class="identifier">near</span><span class="special">,</span> <span class="number">1</span><span class="special">,</span> <span class="special">(</span> <span class="identifier">expected</span> <span class="special">),</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">abs</span><span class="special">(</span> <span class="identifier">actual</span> <span class="special">-</span> <span class="identifier">expected</span> <span class="special">)</span> <span class="special">&lt;</span> <span class="number">0.01</span> <span class="special">)</span> <span class="comment">// this defines a 'near' constraint which can be used as 'near( 42 )'</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">mock_constraint_1_arity</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_FUNCTOR</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">near</span><span class="special">(</span> <span class="number">42</span> <span class="special">)</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">equal</span><span class="special">(</span> <span class="number">42</span> <span class="special">)</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Example with two extra arguments :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CONSTRAINT</span><span class="special">(</span> <span class="identifier">near</span><span class="special">,</span> <span class="identifier">expected</span><span class="special">,</span> <span class="identifier">tolerance</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">abs</span><span class="special">(</span> <span class="identifier">actual</span> <span class="special">-</span> <span class="identifier">expected</span> <span class="special">)</span> <span class="special">&lt;</span> <span class="identifier">tolerance</span> <span class="special">)</span> <span class="comment">// this is how mock::near could be defined</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">mock_constraint_2_arity</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_FUNCTOR</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">near</span><span class="special">(</span> <span class="number">42</span><span class="special">,</span> <span class="number">0.001</span> <span class="special">)</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        or with the alternate more portable macro :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">MOCK_CONSTRAINT_EXT</span><span class="special">(</span> <span class="identifier">near</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="special">(</span> <span class="identifier">expected</span><span class="special">,</span> <span class="identifier">tolerance</span> <span class="special">),</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">abs</span><span class="special">(</span> <span class="identifier">actual</span> <span class="special">-</span> <span class="identifier">expected</span> <span class="special">)</span> <span class="special">&lt;</span> <span class="identifier">tolerance</span> <span class="special">)</span> <span class="comment">// this is how mock::near is defined</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">mock_constraint_2_arity</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">MOCK_FUNCTOR</span><span class="special">(</span> <span class="identifier">f</span><span class="special">,</span> <span class="keyword">void</span><span class="special">(</span> <span class="keyword">int</span> <span class="special">)</span> <span class="special">);</span>
+    <span class="identifier">MOCK_EXPECT</span><span class="special">(</span> <span class="identifier">f</span> <span class="special">).</span><span class="identifier">with</span><span class="special">(</span> <span class="identifier">near</span><span class="special">(</span> <span class="number">42</span><span class="special">,</span> <span class="number">0.001</span> <span class="special">)</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2008-2014 Mathieu Champlon<p>
+        Distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">Boost
+        Software License, Version 1.0</a>.
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="customization.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="patterns.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

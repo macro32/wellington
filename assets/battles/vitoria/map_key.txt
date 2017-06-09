@@ -1,0 +1,12 @@
+~       water, river or body of 
+_/\|    road
+(space) open grass land
+#       rocks, cliff
+@       woods, forest
+*       scrub, undergrowth
+,       marsh, swamp
+.       high ground
+:       very high ground
+^       mountain
+B       buildings, built up area
+

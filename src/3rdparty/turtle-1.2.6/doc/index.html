@@ -1,0 +1,147 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Turtle</title>
+<link rel="stylesheet" href="boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<link rel="home" href="index.html" title="Turtle">
+<link rel="next" href="turtle/motivation.html" title="Motivation">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="" width="" height="" src="images/boost.png"></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/files">Download</a></td>
+<td align="center"><a href="http://sourceforge.net/p/turtle/news">News</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/support">Support</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle">Project</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav"><a accesskey="n" href="turtle/motivation.html"><img src="images/next.png" alt="Next"></a></div>
+<div class="article">
+<div class="titlepage">
+<div>
+<div><h2 class="title">
+<a name="turtle"></a>Turtle</h2></div>
+<div><div class="authorgroup"><div class="author"><h3 class="author">
+<span class="firstname">A C++ mock object library for Boost</span> <span class="surname"></span>
+</h3></div></div></div>
+<div><p class="copyright">Copyright &#169; 2008-2014 Mathieu Champlon</p></div>
+<div><div class="legalnotice">
+<a name="turtle.legal"></a><p>
+        Distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">Boost
+        Software License, Version 1.0</a>.
+      </p>
+</div></div>
+</div>
+<hr>
+</div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+<dt><span class="section"><a href="turtle/motivation.html">Motivation</a></span></dt>
+<dt><span class="section"><a href="turtle/getting_started.html">Getting Started</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="turtle/getting_started.html#turtle.getting_started.create__expect__trigger__verify">Create,
+      expect, trigger, verify</a></span></dt>
+<dt><span class="section"><a href="turtle/getting_started.html#turtle.getting_started.expectation_selection_algorithm">Expectation
+      selection algorithm</a></span></dt>
+<dt><span class="section"><a href="turtle/getting_started.html#turtle.getting_started.error_diagnostic">Error diagnostic</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="turtle/customization.html">Customization</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="turtle/customization.html#turtle.customization.logging">Logging</a></span></dt>
+<dt><span class="section"><a href="turtle/customization.html#turtle.customization.constraints">Constraints</a></span></dt>
+<dt><span class="section"><a href="turtle/customization.html#turtle.customization.number_of_arguments">Number of arguments</a></span></dt>
+<dt><span class="section"><a href="turtle/customization.html#turtle.customization.test_framework_integration">Test
+      framework integration</a></span></dt>
+<dt><span class="section"><a href="turtle/customization.html#turtle.customization.thread_safety">Thread safety</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="turtle/reference.html">Reference</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="turtle/reference.html#turtle.reference.creation">Creation</a></span></dt>
+<dt><span class="section"><a href="turtle/reference.html#turtle.reference.expectation">Expectation</a></span></dt>
+<dt><span class="section"><a href="turtle/reference.html#turtle.reference.verification">Verification</a></span></dt>
+<dt><span class="section"><a href="turtle/reference.html#turtle.reference.reset">Reset</a></span></dt>
+<dt><span class="section"><a href="turtle/reference.html#turtle.reference.constraint">Constraint</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="turtle/patterns.html">Patterns</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="turtle/patterns.html#turtle.patterns.waiting_for_an_asynchronous_call">Waiting
+      for an asynchronous call</a></span></dt>
+<dt><span class="section"><a href="turtle/patterns.html#turtle.patterns.retrieving_an_argument_to_use_in_a_later_constraint">Retrieving
+      an argument to use in a later constraint</a></span></dt>
+<dt><span class="section"><a href="turtle/patterns.html#turtle.patterns.invoking_a_functor_received_as_parameter">Invoking
+      a functor received as parameter</a></span></dt>
+<dt><span class="section"><a href="turtle/patterns.html#turtle.patterns.quickly_writing_a_custom_constraint_for_a_serializable_type">Quickly
+      writing a custom constraint for a serializable type</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="turtle/limitations.html">Limitations</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="turtle/limitations.html#turtle.limitations.no_support_for_unicode_logging">No
+      support for unicode logging</a></span></dt>
+<dt><span class="section"><a href="turtle/limitations.html#turtle.limitations.literal_0_cannot_be_used_as_null_pointer_in_constraints">Literal
+      0 cannot be used as null pointer in constraints</a></span></dt>
+<dt><span class="section"><a href="turtle/limitations.html#turtle.limitations.template_methods_cannot_be_mocked">Template
+      methods cannot be mocked</a></span></dt>
+<dt><span class="section"><a href="turtle/limitations.html#turtle.limitations.non_virtual_methods_cannot_be_mocked">Non-virtual
+      methods cannot be mocked</a></span></dt>
+<dt><span class="section"><a href="turtle/limitations.html#turtle.limitations.private_virtual_methods_cannot_be_mocked_without_spelling_out_the_signature">Private
+      virtual methods cannot be mocked without spelling out the signature</a></span></dt>
+<dt><span class="section"><a href="turtle/limitations.html#turtle.limitations.methods_with_a_throw_specifier_cannot_be_mocked">Methods
+      with a throw specifier cannot be mocked</a></span></dt>
+<dt><span class="section"><a href="turtle/limitations.html#turtle.limitations.compilers_without_support_for_variadic_macros_fail_on_commas_in_mock_base_class">Compilers
+      without support for variadic macros fail on commas in MOCK_BASE_CLASS</a></span></dt>
+<dt><span class="section"><a href="turtle/limitations.html#turtle.limitations.warning_c4505__________unreferenced_local_function_has_been_removed">Warning
+      C4505: '...' : unreferenced local function has been removed</a></span></dt>
+<dt><span class="section"><a href="turtle/limitations.html#turtle.limitations.warning_c4301_________overriding_virtual_function_only_differs_from_______by_const_volatile_qualifier">Warning
+      C4301: '...': overriding virtual function only differs from '...' by const/volatile
+      qualifier</a></span></dt>
+<dt><span class="section"><a href="turtle/limitations.html#turtle.limitations.warning_c4267___argument____conversion_from__size_t__to__unsigned_int___possible_loss_of_data">Warning
+      C4267: 'argument' : conversion from 'size_t' to 'unsigned int', possible loss
+      of data</a></span></dt>
+<dt><span class="section"><a href="turtle/limitations.html#turtle.limitations.using_c__11_lambda_as_constraints_requires_decltype_compiler_support">Using
+      C++11 lambda as constraints requires decltype compiler support</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="turtle/rationale.html">Rationale</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="turtle/rationale.html#turtle.rationale.general_design_forces">General design
+      forces</a></span></dt>
+<dt><span class="section"><a href="turtle/rationale.html#turtle.rationale.exceptions_thrown_should_not_extend_std__exception">Exceptions
+      thrown should not extend std::exception</a></span></dt>
+<dt><span class="section"><a href="turtle/rationale.html#turtle.rationale.the_library_interface_is_based_on_many_macros">The
+      library interface is based on many macros</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="turtle/changelog.html">Changelog</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="turtle/changelog.html#turtle.changelog.1_2_6">1.2.6</a></span></dt>
+<dt><span class="section"><a href="turtle/changelog.html#turtle.changelog.1_2_5">1.2.5</a></span></dt>
+<dt><span class="section"><a href="turtle/changelog.html#turtle.changelog.1_2_4">1.2.4</a></span></dt>
+<dt><span class="section"><a href="turtle/changelog.html#turtle.changelog.1_2_3">1.2.3</a></span></dt>
+<dt><span class="section"><a href="turtle/changelog.html#turtle.changelog.1_2_2">1.2.2</a></span></dt>
+<dt><span class="section"><a href="turtle/changelog.html#turtle.changelog.1_2_1">1.2.1</a></span></dt>
+<dt><span class="section"><a href="turtle/changelog.html#turtle.changelog.1_2_0">1.2.0</a></span></dt>
+<dt><span class="section"><a href="turtle/changelog.html#turtle.changelog.1_1_1">1.1.1</a></span></dt>
+<dt><span class="section"><a href="turtle/changelog.html#turtle.changelog.1_1_0_">1.1.0 </a></span></dt>
+<dt><span class="section"><a href="turtle/changelog.html#turtle.changelog.1_0_1">1.0.1</a></span></dt>
+</dl></dd>
+<dt><span class="section"><a href="turtle/acknowledgements.html">Acknowledgements</a></span></dt>
+</dl>
+</div>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+      Turtle is not an official Boost library.
+    </p></td></tr>
+</table></div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"><p><small>Last revised: May 27, 2014 at 10:54:44 GMT</small></p></td>
+<td align="right"><div class="copyright-footer"></div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav"><a accesskey="n" href="turtle/motivation.html"><img src="images/next.png" alt="Next"></a></div>
+</body>
+</html>

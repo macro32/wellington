@@ -1,0 +1,417 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Changelog</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<link rel="home" href="../index.html" title="Turtle">
+<link rel="up" href="../index.html" title="Turtle">
+<link rel="prev" href="rationale.html" title="Rationale">
+<link rel="next" href="acknowledgements.html" title="Acknowledgements">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="" width="" height="" src="../images/boost.png"></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/files">Download</a></td>
+<td align="center"><a href="http://sourceforge.net/p/turtle/news">News</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/support">Support</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle">Project</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="rationale.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="acknowledgements.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="turtle.changelog"></a><a class="link" href="changelog.html" title="Changelog">Changelog</a>
+</h2></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="changelog.html#turtle.changelog.1_2_6">1.2.6</a></span></dt>
+<dt><span class="section"><a href="changelog.html#turtle.changelog.1_2_5">1.2.5</a></span></dt>
+<dt><span class="section"><a href="changelog.html#turtle.changelog.1_2_4">1.2.4</a></span></dt>
+<dt><span class="section"><a href="changelog.html#turtle.changelog.1_2_3">1.2.3</a></span></dt>
+<dt><span class="section"><a href="changelog.html#turtle.changelog.1_2_2">1.2.2</a></span></dt>
+<dt><span class="section"><a href="changelog.html#turtle.changelog.1_2_1">1.2.1</a></span></dt>
+<dt><span class="section"><a href="changelog.html#turtle.changelog.1_2_0">1.2.0</a></span></dt>
+<dt><span class="section"><a href="changelog.html#turtle.changelog.1_1_1">1.1.1</a></span></dt>
+<dt><span class="section"><a href="changelog.html#turtle.changelog.1_1_0_">1.1.0 </a></span></dt>
+<dt><span class="section"><a href="changelog.html#turtle.changelog.1_0_1">1.0.1</a></span></dt>
+</dl></div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.changelog.1_2_6"></a><a class="link" href="changelog.html#turtle.changelog.1_2_6" title="1.2.6">1.2.6</a>
+</h3></div></div></div>
+<p>
+        Released 24 May 2014
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+            Added MOCK_THREAD_SAFE to enable thread safety
+          </li></ul></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.changelog.1_2_5"></a><a class="link" href="changelog.html#turtle.changelog.1_2_5" title="1.2.5">1.2.5</a>
+</h3></div></div></div>
+<p>
+        Released 10 February 2014
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Added workaround for when msvc defines small and near macros
+          </li>
+<li class="listitem">
+            Added support for using non default calling conventions
+          </li>
+<li class="listitem">
+            Changed MOCK_DESTRUCTOR which now requires '~' to preceed the class name
+          </li>
+<li class="listitem">
+            Changed MOCK_*CONVERSION_OPERATOR* which now require an extra first argument
+            'operator'
+          </li>
+<li class="listitem">
+            Added version.hpp with the library version number
+          </li>
+</ul></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.changelog.1_2_4"></a><a class="link" href="changelog.html#turtle.changelog.1_2_4" title="1.2.4">1.2.4</a>
+</h3></div></div></div>
+<p>
+        Released 14 August 2013
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Reworked MOCK_CONSTRAINT to be able to provide names to parameters
+          </li>
+<li class="listitem">
+            Added MOCK_NO_VARIADIC_MACROS to deactivate variadic macros support
+          </li>
+<li class="listitem">
+            Added support for movable only types as parameters
+          </li>
+<li class="listitem">
+            Added logging support for std::unique_ptr, std::shared_ptr and std::weak_ptr
+          </li>
+<li class="listitem">
+            Added move support in actions
+          </li>
+</ul></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.changelog.1_2_3"></a><a class="link" href="changelog.html#turtle.changelog.1_2_3" title="1.2.3">1.2.3</a>
+</h3></div></div></div>
+<p>
+        Released 20 May 2013
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Added support for C++11 lambdas as constraints
+          </li>
+<li class="listitem">
+            Return actions now accept by copy types derived from abstract base types
+          </li>
+<li class="listitem">
+            Added MOCK_CONSTRAINT helper macro
+          </li>
+<li class="listitem">
+            Added support for several sequences in 'in'
+          </li>
+<li class="listitem">
+            Added support for nullptr as constraint
+          </li>
+<li class="listitem">
+            Added mock::close, mock::close_fraction, mock::small and mock::near constraints
+          </li>
+</ul></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.changelog.1_2_2"></a><a class="link" href="changelog.html#turtle.changelog.1_2_2" title="1.2.2">1.2.2</a>
+</h3></div></div></div>
+<p>
+        Released 9 March 2013
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Added variadic macro support for MOCK_BASE_CLASS
+          </li>
+<li class="listitem">
+            Added variadic macro support for MOCK_FUNCTION, MOCK_FUNCTOR and the
+            MOCK_METHOD family
+          </li>
+<li class="listitem">
+            Added round parenthesis support for signatures for MOCK_FUNCTION, MOCK_FUNCTOR
+            and the MOCK_METHOD family
+          </li>
+<li class="listitem">
+            Added MOCK_CONVERSION_OPERATOR_TPL, MOCK_CONST_CONVERSION_OPERATOR_TPL
+            and MOCK_NON_CONST_CONVERSION_OPERATOR_TPL
+          </li>
+<li class="listitem">
+            Added MOCK_FUNCTOR_TPL
+          </li>
+</ul></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.changelog.1_2_1"></a><a class="link" href="changelog.html#turtle.changelog.1_2_1" title="1.2.1">1.2.1</a>
+</h3></div></div></div>
+<p>
+        Released 24 January 2013
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Fixed boost::lambda_functor forward declaration
+          </li>
+<li class="listitem">
+            Added test for whether BOOST_RESULT_OF_NUM_ARGS is large enough
+          </li>
+<li class="listitem">
+            Removed default error policy keeping only Boost.Test integration
+          </li>
+<li class="listitem">
+            Refactored error policy to simplify test frameworks integration
+          </li>
+<li class="listitem">
+            Changed C-string constraint short-cut behaviour to compare strings instead
+            of pointers
+          </li>
+<li class="listitem">
+            Fixed potential conflict with macro max
+          </li>
+<li class="listitem">
+            Fixed missing file name and line number in logs
+          </li>
+<li class="listitem">
+            Moved mock::exception in its own header so that it can be included without
+            the error policy
+          </li>
+<li class="listitem">
+            Fixed type name extraction involving template classes
+          </li>
+</ul></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.changelog.1_2_0"></a><a class="link" href="changelog.html#turtle.changelog.1_2_0" title="1.2.0">1.2.0</a>
+</h3></div></div></div>
+<p>
+        Released 25 May 2012
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Changed MOCK_FUNCTOR syntax to MOCK_FUNCTOR( functor, signature )
+          </li>
+<li class="listitem">
+            Changed MOCK_EXPECT syntax to MOCK_EXPECT( object.tag ) and MOCK_EXPECT(
+            functor )
+          </li>
+<li class="listitem">
+            Changed MOCK_RESET syntax to MOCK_RESET( object.tag ) and MOCK_RESET(
+            functor )
+          </li>
+<li class="listitem">
+            Changed MOCK_VERIFY syntax to MOCK_VERIFY( object.tag ) and MOCK_VERIFY(
+            functor )
+          </li>
+<li class="listitem">
+            Replaced object.verify() with mock::verify( object )
+          </li>
+<li class="listitem">
+            Replaced object.reset() with mock::reset( object )
+          </li>
+<li class="listitem">
+            Added MOCK_FUNCTION, MOCK_STATIC_METHOD and MOCK_STATIC_METHOD_TPL
+          </li>
+<li class="listitem">
+            Removed all std::string to spare unnecessary memory allocations
+          </li>
+<li class="listitem">
+            Wrapped constraints parameters with boost::addressof where needed in
+            order to support types with overloaded operator &amp;
+          </li>
+<li class="listitem">
+            Fixed limitation on operator() of a custom constraint which is no longer
+            required to be const
+          </li>
+<li class="listitem">
+            Added support for mock::reset( functor ) and mock::verify( functor )
+          </li>
+<li class="listitem">
+            Renamed basic_error_policy to default_error_policy
+          </li>
+<li class="listitem">
+            Added checkpoint notification to error policy
+          </li>
+<li class="listitem">
+            Added specialization to log unsigned chars as integers
+          </li>
+<li class="listitem">
+            Fixed a bug that caused an object to remain invalid forever after being
+            invalid and verified once
+          </li>
+<li class="listitem">
+            Added support for mocking constructors
+          </li>
+<li class="listitem">
+            Fixed phoenix and lambda functors logging in the presence of their operators
+            &amp; and &lt;&lt;
+          </li>
+<li class="listitem">
+            Fixed a crash when resetting self-referenced object
+          </li>
+</ul></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.changelog.1_1_1"></a><a class="link" href="changelog.html#turtle.changelog.1_1_1" title="1.1.1">1.1.1</a>
+</h3></div></div></div>
+<p>
+        Released 10 July 2011
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Added support for boost::cref and boost::ref in built-in constraints
+            and mock::format
+          </li>
+<li class="listitem">
+            Removed MOCK_METHOD_TPL for using non compliant code
+          </li>
+<li class="listitem">
+            Added a mock::affirm constraint as evaluating ''actual'' as a boolean
+          </li>
+<li class="listitem">
+            Fixed a bug preventing non-const pointers to be logged properly
+          </li>
+<li class="listitem">
+            Added support for logging std::auto_ptr, boost::shared_ptr and boost::weak_ptr
+          </li>
+<li class="listitem">
+            Added missing check for BOOST_FT_MAX_ARITY when MOCK_MAX_ARGS was set
+            to 21 or higher
+          </li>
+<li class="listitem">
+            Fixed a bug with const smart pointers as first argument to MOCK_EXPECT
+            being invalid
+          </li>
+<li class="listitem">
+            Fixed a crash with Boost.Test when destroying failed static mock objects
+          </li>
+</ul></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.changelog.1_1_0_"></a><a class="link" href="changelog.html#turtle.changelog.1_1_0_" title="1.1.0">1.1.0 </a>
+</h3></div></div></div>
+<p>
+        Released 23 March 2011
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Added Boost.Test log info when an expectation is fulfilled
+          </li>
+<li class="listitem">
+            Fixed a bug preventing to increase the maximum number of arguments of
+            a mocked method using MOCK_MAX_ARGS
+          </li>
+<li class="listitem">
+            Changed the default value for MOCK_MAX_ARGS to 9 instead of 10
+          </li>
+<li class="listitem">
+            Renamed mock::constraint to mock::call
+          </li>
+<li class="listitem">
+            Added custom constraints logging customization in the same way as parameters
+          </li>
+<li class="listitem">
+            Changed the way the default logging of constraints and parameters can
+            be overridden to use a serialization operator to a mock::stream
+          </li>
+<li class="listitem">
+            Enhanced logging by lazily serializing constraints and parameters
+          </li>
+<li class="listitem">
+            Added the possibility to perform conversions when logging constraints
+            and parameters by defining MOCK_USE_CONVERSIONS
+          </li>
+</ul></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.changelog.1_0_1"></a><a class="link" href="changelog.html#turtle.changelog.1_0_1" title="1.0.1">1.0.1</a>
+</h3></div></div></div>
+<p>
+        Released 16 June 2010
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            Destroying a sequence does not remove the associated order call enforcement
+            any more
+          </li>
+<li class="listitem">
+            Added detection for a pointer in mock::assign to dereference it before
+            performing the assignment
+          </li>
+<li class="listitem">
+            Renamed error policies no_match method to unexpected_call
+          </li>
+<li class="listitem">
+            Made boost_test_error_policy throw a mock::exception extending boost::execution_aborted
+            (helpful in order to filter on exceptions)
+          </li>
+<li class="listitem">
+            Fully qualified function calls to prevent unwanted <a href="http://en.wikipedia.org/wiki/Argument_dependent_name_lookup" target="_top">ADL</a>
+          </li>
+<li class="listitem">
+            Added extra namespace level to protect from unwanted <a href="http://en.wikipedia.org/wiki/Argument_dependent_name_lookup" target="_top">ADL</a>
+            with operator&lt;&lt;
+          </li>
+<li class="listitem">
+            Fixed a crash due to <a href="http://www.parashift.com/c%2b%2b-faq-lite/ctors.html#faq-10.12" target="_top">static
+            initialization order fiasco</a> on some platforms
+          </li>
+<li class="listitem">
+            Added support for mocking conversion operators
+          </li>
+<li class="listitem">
+            Added <a href="http://www.boost.org/doc/libs/release/libs/concept_check/concept_check.htm" target="_top">concept
+            checks</a> for better diagnostic upon compilation error
+          </li>
+<li class="listitem">
+            Made template parameter names more user friendly for better diagnostic
+            upon compilation error
+          </li>
+<li class="listitem">
+            Fixed expectation argument types to match signature
+          </li>
+<li class="listitem">
+            Shared parent names among their expectations when a mock::object is used
+            as a base class
+          </li>
+<li class="listitem">
+            Fixed maximum number of mocked methods arguments
+          </li>
+<li class="listitem">
+            Prevented a crash when mocking a destructor and throwing out of the object
+            scope
+          </li>
+</ul></div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2008-2014 Mathieu Champlon<p>
+        Distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">Boost
+        Software License, Version 1.0</a>.
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="rationale.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="acknowledgements.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

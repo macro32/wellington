@@ -1,0 +1,168 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Rationale</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
+<link rel="home" href="../index.html" title="Turtle">
+<link rel="up" href="../index.html" title="Turtle">
+<link rel="prev" href="limitations.html" title="Limitations">
+<link rel="next" href="changelog.html" title="Changelog">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="" width="" height="" src="../images/boost.png"></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/files">Download</a></td>
+<td align="center"><a href="http://sourceforge.net/p/turtle/news">News</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle/support">Support</a></td>
+<td align="center"><a href="http://sourceforge.net/projects/turtle">Project</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="limitations.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="changelog.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="turtle.rationale"></a><a class="link" href="rationale.html" title="Rationale">Rationale</a>
+</h2></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="rationale.html#turtle.rationale.general_design_forces">General design
+      forces</a></span></dt>
+<dt><span class="section"><a href="rationale.html#turtle.rationale.exceptions_thrown_should_not_extend_std__exception">Exceptions
+      thrown should not extend std::exception</a></span></dt>
+<dt><span class="section"><a href="rationale.html#turtle.rationale.the_library_interface_is_based_on_many_macros">The
+      library interface is based on many macros</a></span></dt>
+</dl></div>
+<p>
+      This section explains some of the design and implementation choices.
+    </p>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.rationale.general_design_forces"></a><a class="link" href="rationale.html#turtle.rationale.general_design_forces" title="General design forces">General design
+      forces</a>
+</h3></div></div></div>
+<p>
+        The general idea behind the library design is to be able to write tests quickly
+        and easily as well as to get the best possible diagnostic upon error (both
+        compile and runtime errors).
+      </p>
+<p>
+        The chainable syntax has been chosen in order to be as intuitive as possible,
+        with the most simple form covering the most general use cases.
+      </p>
+<p>
+        Several design choices follow the same motivation :
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            expectations are automatically verified upon destruction
+          </li>
+<li class="listitem">
+            both const and non-const versions of a method are mocked by default
+          </li>
+<li class="listitem">
+            the short-cuts for adding constraints cover 95% of the use cases
+          </li>
+<li class="listitem">
+            non-serializable types do not yield compilation errors but are logged
+            as '?' by default
+          </li>
+</ul></div>
+<p>
+        At the same time customizing any aspect of the library should require minimum
+        effort, for instance :
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            custom constraints can be any functors, including free functions
+          </li>
+<li class="listitem">
+            customizing the logging of a type is done by defining a serialization
+            operator
+          </li>
+<li class="listitem">
+            integrating into a test framework is made possible by writing a simple
+            custom policy
+          </li>
+</ul></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.rationale.exceptions_thrown_should_not_extend_std__exception"></a><a class="link" href="rationale.html#turtle.rationale.exceptions_thrown_should_not_extend_std__exception" title="Exceptions thrown should not extend std::exception">Exceptions
+      thrown should not extend std::exception</a>
+</h3></div></div></div>
+<p>
+        By design the exceptions thrown upon error should not inherit from std::exception,
+        for instance consider the following test case based on the example from the
+        <a class="link" href="motivation.html" title="Motivation">motivation</a> section :
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">overflow_throws</span> <span class="special">)</span>
+<span class="special">{</span>
+    <span class="identifier">mock_view</span> <span class="identifier">v</span><span class="special">;</span>
+    <span class="identifier">calculator</span> <span class="identifier">c</span><span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>
+    <span class="identifier">BOOST_CHECK_THROW</span><span class="special">(</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">add</span><span class="special">(</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span><span class="special">&lt;</span> <span class="keyword">int</span> <span class="special">&gt;::</span><span class="identifier">max</span><span class="special">(),</span> <span class="number">1</span> <span class="special">),</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">exception</span> <span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        Any call to 'v' will be unexpected and yield an exception, which if it were
+        an std::exception would erroneously make the test succeed whereas it is supposed
+        to pass only if the operation overflows (thus not triggering 'v').
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="turtle.rationale.the_library_interface_is_based_on_many_macros"></a><a class="link" href="rationale.html#turtle.rationale.the_library_interface_is_based_on_many_macros" title="The library interface is based on many macros">The
+      library interface is based on many macros</a>
+</h3></div></div></div>
+<p>
+        Despite being often considered harmful they also provide a number of advantages
+        :
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            they pack a lot of code and hide implementation details (MOCK_BASE_CLASS,
+            MOCK_METHOD)
+          </li>
+<li class="listitem">
+            they make the interface homogeneous (MOCK_FUNCTOR, MOCK_CLASS)
+          </li>
+<li class="listitem">
+            line number and file name can be added for logging purposes (MOCK_EXPECT)
+          </li>
+</ul></div>
+<p>
+        Variadic macros are available for fairly recent compilers and provide a smoother
+        user interface :
+      </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+            they help seemlessly support arguments containing commas (MOCK_BASE_CLASS)
+          </li>
+<li class="listitem">
+            they make some of the parameters optional (MOCK_METHOD)
+          </li>
+</ul></div>
+<p>
+        An alternate more portable set of macros is provided for maximum portability
+        if needed.
+      </p>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2008-2014 Mathieu Champlon<p>
+        Distributed under the <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">Boost
+        Software License, Version 1.0</a>.
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="limitations.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="changelog.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
