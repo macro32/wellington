@@ -1,6 +1,8 @@
 #ifndef STDSCR_MODEL_HPP
 #define STDSCR_MODEL_HPP
 
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS
+
 #include <boost/smart_ptr.hpp>
 #include <boost/foreach.hpp>
 #include <boost/program_options.hpp>

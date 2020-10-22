@@ -19,13 +19,14 @@ int TileScanner::Input()
 	{
 		return line_[ index_++ ];
 	}
-    if( !input_.eof() )
-    {
+    	if( !input_.eof() )
+    	{
 		getline( input_, line_ );
 		boost::to_lower( line_ );
 		index_ = 0;
 		return line_[ index_++ ];
-    }
+    	}
+	return 0;
 }
 
 void TileScanner::Unput()
@@ -89,4 +90,5 @@ int TileScanner::NextSymbol()
 				break;
 		}
 	}
+	return EOFSY;
 }

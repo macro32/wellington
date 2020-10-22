@@ -24,6 +24,7 @@ void StdScrModel::Terminate()
 
 void StdScrModel::Load()
 {
+	logger.Severity( severity_level::info, __PRETTY_FUNCTION__ );
 	LoadMap();
 	LoadKey();
 }
@@ -57,9 +58,10 @@ void StdScrModel::DisplayUnits()
 void StdScrModel::LoadMap( const std::string& fileName )
 {
 	logger.Severity( severity_level::info, __PRETTY_FUNCTION__ );
-	Properties::ptr map = Load( fileName );
-	//write_json( std::cout, *map );
+	logger.Severity( severity_level::info, "file name ="+fileName );
 
+	Properties::ptr map = Load( fileName );
+	
 	for( auto const& tiles : map->get_child( "tiles" ) )
 	{
 		Tile tile;
@@ -106,6 +108,7 @@ void StdScrModel::LoadMap( const std::string& fileName )
 
 Properties::ptr StdScrModel::Load( const std::string& fileName )
 {
+	logger.Severity( severity_level::info, __PRETTY_FUNCTION__ );
 	return Properties::ReadJson( fileName ); 
 }
 
@@ -146,6 +149,7 @@ void StdScrModel::EnterOrders()
 
 StdScrModel::line_ptr StdScrModel::ReadCommand()
 {
+	return nullptr;
 }
 
 

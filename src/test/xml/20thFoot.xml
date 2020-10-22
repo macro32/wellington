@@ -1,0 +1,40 @@
+<Actor type="Line" resource="20thFoot.xml">
+  <Components>
+    <Component name="IdentityComponent" >
+      <Name>20th Foot</Name>
+      <Type>Line Infantry</Type>
+      <Points>3</Points>
+      <Unit>Company</Unit>
+    </Component>
+    <Component name="MoveComponent" >
+      <CloseOrderColumn>
+        <Front>15</Front>
+        <Normal>60</Normal>
+        <Action>80</Action>
+      </CloseOrderColumn>
+      <CloseOrderLine>
+        <Front>15</Front>
+        <Normal>40</Normal>
+        <Action>80</Action>
+      </CloseOrderLine>
+      <Square>
+        <Front>NA</Front>
+        <Normal>40</Normal>
+        <Action>NA</Action>
+      </Square>
+	  <StartX>15</StartX>
+	  <StartY>15</StartY>
+    </Component>
+	<Component name="OrderComponent">
+	  <Order>Wait orders</Order>
+	</Component>
+    <Component name="RepresentationComponent" >
+      <Image>line-infantry-company.png</Image>
+	  <Char>F</Char>
+    </Component>
+    <Component name="FireComponent" >
+      <Weapon>Musket</Weapon>
+      <Range>120</Range>
+    </Component>
+  </Components>
+</Actor>

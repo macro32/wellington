@@ -20,7 +20,7 @@ LDFLAGS	= $(LIBDIRS)
 prefix = ../../game
 battle = ../../assets/battles/vitoria
 
-SRCS = 	main.cpp 
+SRCS = 	main.cpp config.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 all: welly

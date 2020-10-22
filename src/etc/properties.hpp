@@ -54,6 +54,7 @@ public:
     {
 	logger.Severity( severity_level::info, __PRETTY_FUNCTION__ );
         ptr properties = boost::make_shared< property_tree >();
+	logger.Severity( severity_level::info, fileName );
         read_json( fileName, *properties );        
         return properties;
     }

@@ -9,13 +9,21 @@ StdScrMapController::StdScrMapController( boost::program_options::variables_map&
 		command_( boost::make_shared< Command >() ),
 		options_( vm )
 {
+	logger.Severity( severity_level::info, __PRETTY_FUNCTION__ );
+	if( vm.count("battle" ) )
+	{
+		battleFileName_ = options_["battle"].as<std::string>();
+		logger.Severity( severity_level::info, "battle file name - "+mapFileName_ );
+	}
 	if( vm.count("map" ) )
 	{
 		mapFileName_ = options_["map"].as<std::string>();
+		logger.Severity( severity_level::info, "map file name - "+mapFileName_ );
 	}
 	if( vm.count("key" ) )
 	{
-		mapKeyFileName_ = options_["map"].as<std::string>();
+		mapKeyFileName_ = options_["key"].as<std::string>();
+		logger.Severity( severity_level::info, "map key file name - "+mapKeyFileName_ );
 	}
 }
 
@@ -45,6 +53,8 @@ void StdScrMapController::Load()
 {
 	logger.Severity( severity_level::info, __PRETTY_FUNCTION__ );
 
+	LoadResources();
+
 	model_->LoadMap( mapFileName_ );
 	model_->LoadKey( mapKeyFileName_ );
 }
@@ -53,8 +63,7 @@ void StdScrMapController::Display()
 {
 	DisplayMap();
 	DisplayKey();
-	DisplayCommand();
-	DisplayUnits();
+	//DisplayUnits();
 }
 
 void StdScrMapController::DisplayMap()
@@ -150,7 +159,7 @@ void StdScrMapController::Load( line_ptr command )
 void StdScrMapController::LoadResources()
 {
 	logger.Severity( severity_level::info, __PRETTY_FUNCTION__ );
-
+return;
 	XmlDocResource::xml_resource_ptr res = boost::static_pointer_cast< XmlDocResource >( cache_.Get( "deployment" ) );
 
 	Properties::pointer xml = res->Get();
@@ -175,6 +184,8 @@ void StdScrMapController::LoadResources()
 		}
 
 	}
+
+	return;
 
 	pugi::xml_node units = (*xml).child( "Battle" ).child( "Units" );
 	for( pugi::xml_node unit: units.children( "Unit" ) )
@@ -224,6 +235,7 @@ void StdScrMapController::Run()
 	logger.Severity( severity_level::info, __PRETTY_FUNCTION__ );
 
 	Init();
+	Reset();
 	DisplayCommand();
 
 	do
@@ -235,18 +247,18 @@ void StdScrMapController::Run()
 		}
 		if( *command == "reset" )
 		{
-			Reset();
+			//Reset();
 		}
-		if( command->find( "load" ) == 0 )
+		if( *command == "load" )
 		{
-			Load( command );
-			LoadResources();
-			Init();
-			Reset();
+			//Load( command );
+			//LoadResources();
+			//Init();
+			//Reset();
 		}
 		if( *command == "orders" )
 		{
-			EnterOrders();
+			//EnterOrders();
 		}
 
 		DisplayCommand();

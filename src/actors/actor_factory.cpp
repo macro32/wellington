@@ -12,9 +12,13 @@ ActorFactory::ActorFactory()
     logger.Severity( severity_level::info, __PRETTY_FUNCTION__ );
 
     componentFactory_.Register< IdentityComponent >( ActorComponent::GetIdFromName( IdentityComponent::name_ ) );
+    logger.Severity( severity_level::info, __PRETTY_FUNCTION__ );
     componentFactory_.Register< MoveComponent >( ActorComponent::GetIdFromName( MoveComponent::name_ ) );
+    logger.Severity( severity_level::info, __PRETTY_FUNCTION__ );
     componentFactory_.Register< RepresentationComponent >( ActorComponent::GetIdFromName( RepresentationComponent::name_ ) );
+    logger.Severity( severity_level::info, __PRETTY_FUNCTION__ );
     componentFactory_.Register< FireComponent >( ActorComponent::GetIdFromName( FireComponent::name_ ) );
+    logger.Severity( severity_level::info, __PRETTY_FUNCTION__ );
     componentFactory_.Register< OrderComponent >( ActorComponent::GetIdFromName( OrderComponent::name_ ) );
 }
 

@@ -1,6 +1,8 @@
 #ifndef ACTOR_COMPONENT_HPP
 #define ACTOR_COMPONENT_HPP
 
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS
+
 #include <boost/smart_ptr.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/lexical_cast.hpp>
@@ -45,6 +47,7 @@ public:
 	logger.Severity( severity_level::info, __PRETTY_FUNCTION__ );
 	logger.Severity( severity_level::debug, name );
         boost::hash<std::string> string_hash;
+	logger.Severity( severity_level::debug, boost::lexical_cast<std::string>( string_hash(name) ) );
 	return string_hash( name );
     }
 

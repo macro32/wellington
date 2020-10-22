@@ -5,6 +5,8 @@
 
 #include <string>
 
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS
+
 #include <boost/smart_ptr.hpp>
 
 #include "stdscr_ikey.hpp"

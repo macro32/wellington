@@ -1,0 +1,27 @@
+<Actor type="Rifles" resource="95thRifles" >
+  <Components>
+    <Component name="IdentityComponent" >
+      <Name>95th Rifles</Name>
+      <Type>Rifles</Type>
+      <Points>75</Points>
+    </Component>
+    <Component name="MoveComponent" >
+      <Front>30</Front>
+      <Normal>140</Normal>
+      <Action>260</Action>
+	  <StartX>20</StartX>
+	  <StartY>20</StartY>
+    </Component>
+	<Component name="OrderComponent">
+	  <Order>Wait orders</Order>
+	</Component>
+    <Component name="RepresentationComponent" >
+      <Image>95th-rifles.png</Image>
+	  <Char>R</Char>
+    </Component>
+    <Component name="FireComponent" >
+      <Weapon>None</Weapon>
+      <Range>NA</Range>
+    </Component>
+  </Components>
+</Actor>

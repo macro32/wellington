@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<Actor type="C-in-C" resource="Wellington.xml" >
+  <Components>
+    <Component name="IdentityComponent" >
+      <Name>Wellington</Name>
+      <Type>C-in-C</Type>
+      <Points>75</Points>
+    </Component>
+    <Component name="MoveComponent" >
+      <Front>30</Front>
+      <Normal>140</Normal>
+      <Action>260</Action>
+	  <StartX>30</StartX>
+	  <StartY>30</StartY>
+    </Component>
+	<Component name="OrderComponent" >
+	  <Order>Defeat Napoleon</Order>
+	</Component>
+    <Component name="RepresentationComponent" >
+      <Image>general-c-in-c.png</Image>
+	  <Char>W</Char>
+    </Component>
+    <Component name="FireComponent" >
+      <Weapon>None</Weapon>
+      <Range>NA</Range>
+    </Component>
+  </Components>
+</Actor>

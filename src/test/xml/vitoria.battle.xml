@@ -1,0 +1,21 @@
+<Battle>
+  <Map>
+	<File>tiles.json</File>
+	<Key>map_key.txt</Key>
+	<Scale>0.25</Scale>
+  </Map>
+  <Units>
+	<Unit>
+		<Actor>Wellington.xml</Actor>
+	</Unit>
+	<Unit>
+		<Actor>ScotsGreys.xml</Actor>
+	</Unit>
+	<Unit>
+		<Actor>20thFoot.xml</Actor>
+	</Unit>
+	<Unit>
+		<Actor>95thRifles.xml</Actor>
+	</Unit>
+  </Units>
+</Battle>
